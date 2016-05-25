@@ -13,6 +13,11 @@ if (!file_exists(NP2_CACHE_DIR) || !is_dir(NP2_CACHE_DIR))
 
 class Np2_Game
 {
+	/**
+	 * Fetches a value from the cache, if available.
+	 * @param string $key Cache filename suffix.
+	 * @return bool|array False on failure or array of data on success.
+	 */
 	private static function readCachedValue($key)
 	{
 		if (empty($key))
@@ -46,6 +51,12 @@ class Np2_Game
 		return false;
 	}
 
+	/**
+	 * Saves a value to a cache file
+	 * @param string $key  Filename suffix for the cache file.
+	 * @param array  $data An array of data to store to cache.
+	 * @return bool True if successfully saved, false otherwise.
+	 */
 	private static function saveCachedValue($key, array $data)
 	{
 		if (empty($key) || !isset($data))
@@ -66,6 +77,14 @@ class Np2_Game
 		return ($result !== false);
 	}
 
+	/**
+	 * Gets information about one or more games.
+	 * @param bool   $getExtended If true, fetches game details without a gameId speficied
+	 *                            or gets player and star data if a gameId is speficied.
+	 * @param string $gameId      The ID of a game for which to fetch info, or null to fetch
+	 *                            info for all games.
+	 * @return string JSON encoded array of game data.
+	 */
 	public static function getGameInfo($getExtended = false, $gameId = null)
 	{
 		// If a game ID is specified, use that. Otherwise, fetch all games.

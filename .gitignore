@@ -1,0 +1,13 @@
+# Windows / OS X filesystem junk
+Desktop.ini
+Thumbs.db
+.DS_Store
+
+# Gross compiled stuff
+.sass-cache
+css
+js/*.min.*
+
+# Naughty things we don't want the world to see
+data
+config.ini

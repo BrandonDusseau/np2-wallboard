@@ -3,10 +3,10 @@
 A wallboard for tracking stats for Neptune's Pride 2: Triton. More details will be added to is document as the project is fleshed out.
 
 ## Usage ##
-Just rename `config.sample.ini` to `config.ini` and put your NP2 credentials in it.
+Rename `config.sample.ini` to `config.ini` and put your NP2 credentials in it. Also, your server environment should allow write access to `data` to enable caching.
 
-## Usage Requirements ##
-A web server running PHP 5.4 or higher.
+## Requirements ##
+A web server running PHP 5.3 or higher.
 
 ## Development Requirements ##
 Compass and a JavaScript uglifier of your choice.

@@ -9,5 +9,6 @@ css
 js/*.min.*
 
 # Naughty things we don't want the world to see
-data
+data/*
+!data/.htaccess
 config.ini

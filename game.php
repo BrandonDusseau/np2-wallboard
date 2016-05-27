@@ -91,8 +91,7 @@ class Np2_Game
 		// If a game ID is specified, use that. Otherwise, fetch all games.
 		if (!empty($gameId) && !is_numeric($gameId))
 		{
-			echo json_encode(array("error" => "Invalid game ID specified"));
-			return;
+			return json_encode(array("error" => "Invalid game ID specified"));
 		}
 
 		// Attempt to read data from cache first
@@ -101,10 +100,7 @@ class Np2_Game
 		if (!$ignoreCache && !empty($cacheContent))
 		{
 			// Inject the current time into the game info
-			if (!empty($gameId))
-			{
-				$cacheContent['realNow'] = round(microtime(true) * 1000);
-			}
+			$cacheContent['realNow'] = round(microtime(true) * 1000);
 
 			return json_encode($cacheContent);
 		}
@@ -116,8 +112,7 @@ class Np2_Game
 		list($success, $message) = $api->getGames();
 		if (!$success)
 		{
-			echo json_encode(array("error" => "Unable to load list of games"));
-			return;
+			return json_encode(array("error" => "Unable to load list of games"));
 		}
 
 		// Put the detailed game info with each requested game

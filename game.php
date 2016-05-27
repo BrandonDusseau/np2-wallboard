@@ -20,6 +20,7 @@ class Np2_Game
 	 */
 	private static function readCachedValue($key)
 	{
+		// Fail if no key was specified.
 		if (empty($key))
 		{
 			return false;
@@ -85,7 +86,7 @@ class Np2_Game
 	 *                            info for all games.
 	 * @return string JSON encoded array of game data.
 	 */
-	public static function getGameInfo($getExtended = false, $gameId = null)
+	public static function getGameInfo($getExtended = false, $gameId = null, $ignoreCache = false)
 	{
 		// If a game ID is specified, use that. Otherwise, fetch all games.
 		if (!empty($gameId) && !is_numeric($gameId))
@@ -97,15 +98,22 @@ class Np2_Game
 		// Attempt to read data from cache first
 		$cacheKey = (!empty($gameId) ? $gameId : "all") . ($getExtended ? "_ext" : "");
 		$cacheContent = self::readCachedValue($cacheKey);
-		if (!empty($cacheContent))
+		if (!$ignoreCache && !empty($cacheContent))
 		{
+			// Inject the current time into the game info
+			if (!empty($gameId))
+			{
+				$cacheContent['realNow'] = round(microtime(true) * 1000);
+			}
+
 			return json_encode($cacheContent);
 		}
 
+		// Initialize the API adapter
 		$api = new Np2_API();
 
+		// Get games list
 		list($success, $message) = $api->getGames();
-
 		if (!$success)
 		{
 			echo json_encode(array("error" => "Unable to load list of games"));
@@ -113,57 +121,80 @@ class Np2_Game
 		}
 
 		// Put the detailed game info with each requested game
-		$games = $message;
+		$gameData = $message;
+		$returnData = array();
 
-		foreach ($games as $gameIdx => &$game)
+		// If we are loading all games, only get basic information
+		if (empty($gameId))
 		{
-			$thisGameId = $game['gameId'];
-
-			// Remove any games that were not requested
-			if (!empty($gameId) && $thisGameId != $gameId)
-			{
-				unset($games[$gameIdx]);
-				continue;
-			}
-
-			// Merge the game data into the game element
+			// If requesting extended data, also load that information.
 			if ($getExtended)
 			{
-				list($success, $thisGame) = $api->getGame($thisGameId);
-				if ($success)
+				foreach ($gameData as &$game)
 				{
-					$game = array_merge($game, $thisGame);
+					// Merge the extended information into this game's record.
+					list($success, $thisGame) = $api->getGame($game['gameId']);
+					if ($success)
+					{
+						$game = array_merge($game, $thisGame);
+					}
 				}
 			}
 
-			// Only get additional information if requesting a specific game and extended info
-			if (!empty($gameId) && $getExtended)
+			// Put the information into a new array to prepare it for sending
+			$returnData['games'] = $gameData;
+		}
+		else
+		{
+			// Filter out any games not requested
+			$gameData = array_filter(
+				$gameData,
+				function ($a) use ($gameId)
+				{
+					return ($a['gameId'] == $gameId);
+				}
+			);
+
+			// Move the data into a new array
+			$returnData = $gameData[0];
+
+			// Get basic game information
+			list($success, $thisGame) = $api->getGame($gameId);
+			if ($success)
+			{
+				$returnData = array_merge($returnData, $thisGame);
+			}
+
+			// If extended info is requested, get that too
+			if ($getExtended)
 			{
 				// Get players for the game
-				list($success, $playerList) = $api->getPlayers($thisGameId);
-				$playerArray = [];
-				if ($success)
-				{
-					$playerArray = $playerList;
-				}
+				list($success, $playerList) = $api->getPlayers($gameId);
+				$returnData['players'] = $success ? $playerList : [];
 
 				// Get stars for the game
-				list($success, $starList) = $api->getStars($thisGameId);
+				list($success, $starList) = $api->getStars($gameId);
 				$starArray = [];
 				if ($success)
 				{
 					$starArray = $starList;
-				}
 
-				// Embed this information in the game
-				$game['players'] = $playerArray;
-				$game['stars'] = $starArray;
+					// Remove player private data
+					foreach ($starList as &$star)
+					{
+						$star = array_diff_key($star, ["ships" => "", "visible" => ""]);
+					}
+				}
+				$returnData['stars'] = $starArray;
 			}
 		}
 
 		// Cache the result
-		self::saveCachedValue($cacheKey, $games);
+		self::saveCachedValue($cacheKey, $returnData);
 
-		return json_encode($games);
+		// Inject current time
+		$returnData['realNow'] = round(microtime(true) * 1000);
+
+		return json_encode($returnData);
 	}
 }

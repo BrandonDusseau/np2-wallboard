@@ -14,7 +14,7 @@ require_once __DIR__ . "/game.php";
 			die("No game selected.</body></html>");
 		}
 
-		echo "<pre>" . Np2_Game::getGameInfo(true, $_GET['game']) . "</pre>" . PHP_EOL;
+		echo "<pre>" . Np2_Game::getGameInfo(true, $_GET['game'], !empty($_GET['nocache'])) . "</pre>" . PHP_EOL;
 	?>
 </body>
 </html>

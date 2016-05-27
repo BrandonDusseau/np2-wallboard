@@ -23,7 +23,7 @@ require_once __DIR__ . "/game.php";
 		}
 		else
 		{
-			foreach ($games as $game)
+			foreach ($games['games'] as $game)
 			{
 				echo "<a href='wallboard.php?game={$game['gameId']}'>{$game['name']}</a><br />" . PHP_EOL;
 			}

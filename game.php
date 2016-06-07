@@ -4,6 +4,7 @@ define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
 define("NP2_CACHE_EXPIRE", 300); // 5 minutes
 
 require_once __DIR__ . "/api.php";
+require_once __DIR__ . "/color.php";
 
 // Create the cache directory if it does not exist
 if (!file_exists(NP2_CACHE_DIR) || !is_dir(NP2_CACHE_DIR))
@@ -30,7 +31,7 @@ class Np2_Game
 		$cacheFile = str_replace("%suffix%", $key, NP2_CACHE_FILE);
 
 		// Get cached result if possible
-		if (file_exists($cacheFile) && time() - filemtime($cacheFile) <= NP2_CACHE_EXPIRE)
+		if (file_exists($cacheFile) && (NP2_CACHE_EXPIRE == 0 || time() - filemtime($cacheFile) <= NP2_CACHE_EXPIRE))
 		{
 			$cacheContent = @file_get_contents($cacheFile);
 		}
@@ -155,9 +156,13 @@ class Np2_Game
 
 			// Get basic game information
 			list($success, $thisGame) = $api->getGame($gameId);
-			if ($success)
+			if ($success && $thisGame != null)
 			{
 				$returnData = array_merge($returnData, $thisGame);
+			}
+			else
+			{
+				return json_encode(array("error" => "Invalid game data received: {$thisGame}"));
 			}
 
 			// If extended info is requested, get that too
@@ -165,7 +170,38 @@ class Np2_Game
 			{
 				// Get players for the game
 				list($success, $playerList) = $api->getPlayers($gameId);
-				$returnData['players'] = $success ? $playerList : [];
+				$playerArray = [];
+				if ($success)
+				{
+					$playerCount = count($playerList);
+
+					// Inject data into the players list
+					foreach ($playerList as $idx => $player)
+					{
+						// Calculate the player's color
+						$colorIndex = floor(64 / $playerCount) * $idx;
+
+						// If there are few enough players, shift the colors a little
+						// to better match the game.
+						if ($playerCount < 59)
+						{
+							$colorIndex += 4;
+						}
+
+						// Inject player colors
+						$playerList[$idx]['color'] = Color::getColor($colorIndex);
+					}
+
+					// Rekey players by ID
+					$playerListRekeyed = [];
+					foreach ($playerList as $player)
+					{
+						$newKey = $player['playerId'];
+						$playerListRekeyed[$newKey] = $player;
+					}
+
+					$returnData['players'] = $playerListRekeyed;
+				}
 
 				// Get stars for the game
 				list($success, $starList) = $api->getStars($gameId);

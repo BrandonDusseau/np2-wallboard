@@ -1,5 +1,4 @@
 <?php
-define("API_URL", "https://neptunes-pride-api.herokuapp.com/");
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 define("API_DATA_DIR", __DIR__ . "/data");
 define("API_TOKEN_FILE", API_DATA_DIR . "/token.dat");
@@ -9,6 +8,7 @@ class Np2_API
 {
 	private $username;
 	private $password;
+	private $api_url;
 	private $auth_retry;
 	private $api_token;
 
@@ -26,12 +26,13 @@ class Np2_API
 		}
 
 		// Get the credentials from the config file
-		if (empty($config['password']) || empty($config['username']))
+		if (empty($config['password']) || empty($config['username']) || empty($config['api_url']))
 		{
 			throw new ErrorException("Credentials are invalid or incomplete.");
 		}
 		$this->username = $config['username'];
 		$this->password = $config['password'];
+		$this->api_url = $config['api_url'];
 
 		// Create the data directory if it does not exist
 		if (!file_exists(API_DATA_DIR) || !is_dir(API_DATA_DIR))
@@ -40,7 +41,7 @@ class Np2_API
 		}
 
 		// Get cached API token if possible
-		if (file_exists(API_TOKEN_FILE) && time() - filemtime(API_TOKEN_FILE) <= API_TOKEN_EXPIRE)
+		if (API_TOKEN_EXPIRE != 0 && file_exists(API_TOKEN_FILE) && time() - filemtime(API_TOKEN_FILE) <= API_TOKEN_EXPIRE)
 		{
 			$api_token = @file_get_contents(API_TOKEN_FILE);
 		}
@@ -63,7 +64,7 @@ class Np2_API
 			return array(false, "Invalid arguments");
 		}
 
-		$ch = curl_init(API_URL . $action);
+		$ch = curl_init($this->api_url . $action);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
 		curl_setopt($ch, CURLOPT_POSTREDIR, 1 & 2); // Follow 301 and 302
@@ -135,7 +136,7 @@ class Np2_API
 				curl_close($ch);
 				return array(false, "Connection failed (" . $error . ")");
 			}
-			elseif ($decoded_response === false)
+			elseif (empty($decoded_response))
 			{
 				curl_close($ch);
 				return array(false, "Invalid response received from API (" . $response . ")");

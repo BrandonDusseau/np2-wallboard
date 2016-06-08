@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . "/game.php";
-$gameInfoString = Np2_Game::getGameInfo(true, $_GET['game'], !empty($_GET['nocache']));
+$gameInfoString = Np2_Game::getGameInfo($_GET['game'], !empty($_GET['nocache']));
 $gameInfo = json_decode($gameInfoString, true);
+//die(str_replace("\n", "<br>", preg_replace("/\ /", "&nbsp;", var_export(array_keys(array_diff_key($gameInfo['stars'][4], $gameInfo['stars'][3])), true))));
+//die(str_replace("\n", "<br>", preg_replace("/\ /", "&nbsp;", var_export($gameInfo['stars'], true))));
 ?>
 <!DOCTYPE html>
 <html>

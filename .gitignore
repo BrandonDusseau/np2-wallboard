@@ -8,6 +8,7 @@ Thumbs.db
 css
 js/*.min.*
 !js/jquery.min.js
+vendor
 
 # Naughty things we don't want the world to see
 data/*

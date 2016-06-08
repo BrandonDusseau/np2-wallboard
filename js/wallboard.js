@@ -4,14 +4,14 @@ $(document).ready(
 	function ()
 	{
 		data = JSON.parse($("#data").html());
-		productionRate = data.details.productionRate || 0;
-		productionCounter = data.status.productionCounter || 0;
-		tickRate = data.details.tickRate || 0;
-		tickFragment = data.status.tickFragment || 0;
-		timeNow = new Date(data.realNow) || 0;
+		productionRate = data.production_rate || 0;
+		productionCounter = data.production_counter || 0;
+		tickRate = data.tick_rate || 0;
+		tickFragment = data.tick_fragment || 0;
+		timeNow = new Date(data.now) || 0;
 		localTimeCorrection = timeNow.valueOf() - (new Date).valueOf();
-		stars = data.stars || 0;
-		players = data.players || 0;
+		stars = data.stars || [];
+		players = data.players || {};
 
 		if (stars.length)
 		{
@@ -23,9 +23,9 @@ $(document).ready(
 				var starMaxY = 0;
 				var starMinX = 0;
 				var starMinY = 0;
-				for (var s = 0; s < stars.length; ++s)
+				for (var st = 0; st < stars.length; ++st)
 				{
-					var star = stars[s];
+					var star = stars[st];
 					var starX = star.position.x;
 					var starY = star.position.y;
 					starMaxX = (starX > starMaxX ? starX : starMaxX);
@@ -36,13 +36,11 @@ $(document).ready(
 
 				var starXSpan = starMaxX - starMinX;
 				var starYSpan = starMaxY - starMinY;
-				var starMaxDim = Math.max(starXSpan, starYSpan);
-				console.log(players);
 
 				for (var st = 0; st < stars.length; ++st)
 				{
 					var star = stars[st];
-					var starId = star.starId;
+					var starId = star.uid;
 					var starElement = $(".star[data-star-id='" + starId + "']");
 					if (!starElement.length)
 					{
@@ -55,10 +53,10 @@ $(document).ready(
 					starElement.css("left", starPosX + "%").css("top", starPosY + "%");
 
 					// Set star color
-					if (typeof star.playerId != "undefined" && star.playerId != -1 &&
-						typeof players[star.playerId] != "undefined")
+					if (typeof star.player != "undefined" && star.player != -1 &&
+						typeof players[star.player] != "undefined")
 					{
-						starElement.css('border-color', players[star.playerId].color);
+						starElement.css('border-color', players[star.player].color);
 					}
 					else
 					{
@@ -81,16 +79,30 @@ $(document).ready(
 	}
 );
 
+/**
+ * Returns time to the end of the galactic cycle.
+ * @return {string} Formatted time to production.
+ */
 function timeToProduction()
 {
 	return timeToTick(productionRate - productionCounter);
 }
 
-function timeToTick(galactic_cycle)
+/**
+ * Returns time to the next tick.
+ * @param  {int} galacticCycle Current status of the galactic cycle.
+ * @return {string} Formatted time to tick.
+ */
+function timeToTick(galacticCycle)
 {
-	return formatTime((60000 * tickRate * galactic_cycle) - (60000 * tickFragment * tickRate) - ((new Date).valueOf() - timeNow.valueOf()) - localTimeCorrection);
+	return formatTime((60000 * tickRate * galacticCycle) - (60000 * tickFragment * tickRate) - ((new Date).valueOf() - timeNow.valueOf()) - localTimeCorrection);
 }
 
+/**
+ * Outputs time in seconds in [DD:]HH:MM:SS format
+ * @param  {int} time Time to convert.
+ * @return {string} Converted time.
+ */
 function formatTime(time)
 {
 	var timeInSeconds = time / 1000, timeString = '';

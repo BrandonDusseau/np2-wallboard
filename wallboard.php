@@ -17,12 +17,16 @@ $gameInfo = json_decode($gameInfoString, true);
 <body>
 	<div id="data" style="display:none;"><?php echo $gameInfoString; ?></div>
 	<div id="pane_left">
-		<?php
-			foreach ($gameInfo['players'] as $player)
-			{
-				echo $player['name'] . "<br />";
-			}
-		?>
+		<div id="player_template" class="player">
+			<div class="player_head">
+				<div class="player_head_inner">
+					<div class="player_ring"></div>
+					<div class="player_name"></div>
+				</div>
+			</div>
+			<div class="player_stats"></div>
+			<div class="player_tech"></div>
+		</div>
 	</div>
 	<div id="pane_right">
 		<div id="pane_stars">
@@ -30,8 +34,8 @@ $gameInfo = json_decode($gameInfoString, true);
 		</div>
 		<div id="pane_bottom">
 			<div class="title-area">
+				<div id="game_status"></div>
 				<div id="game_title"></div>
-				<div id="game_status">PAUSED</div>
 			</div>
 			<div class="timer-container">
 				<div id="game_timer"></div>

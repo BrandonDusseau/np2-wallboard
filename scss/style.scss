@@ -26,8 +26,57 @@ body {
 	display: flex;
 	flex-flow: column;
 
-	.player-cell {
-	
+	.player {
+		background-color: #136;
+		flex: 1 1 auto;
+		margin: 1px 0;
+		display: flex;
+
+		.player_head {
+			flex: 1 1 auto;
+			font-size: 5vmin;
+			position: relative;
+
+			.player_head_inner {
+				position: absolute;
+				width: 100%;
+				top: 50%;
+				@include translateY(-50%);
+
+				.player_ring {
+					display: inline-block;
+					height: 0.5em;
+					width: 0.5em;
+					border: 0.15em solid #000;
+					border-radius: 50%;
+					margin: 0 0 0 0.25em;
+					vertical-align: middle;
+				}
+
+				.player_name {
+					display: inline-block;
+					margin-top: 0.2em;
+					padding-bottom: 0.3em;
+					width: calc(100% - 0.3em - 5px - 1em);
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					vertical-align: middle;
+				}
+			}
+		}
+
+		.player_stats {
+			flex: 0 1 auto;
+		}
+
+		.player_tech {
+			flex: 0 1 auto;
+		}
+	}
+
+	.player#player_template {
+		display: none;
 	}
 }
 
@@ -46,16 +95,19 @@ body {
 
 		#star_container {
 			position: relative;
-			width: calc(100% - 1.5vmin - 24px);
-			height: calc(100% - 1.5vmin - 24px);
-			margin: calc(0.5vmin + 8px);
+			font-size: 1.75vmin;
+			width: calc(100% - 1.0em - 0.6em - 2px);  /* 100% - (3 * (width - border) - 2px) */
+			height: calc(100% - 1.0em - 0.6em - 2px); /* 100% - (3 * (height - border) - 2px) */
+			margin: 4px;                              /* 4px buffer */
+			margin-right: calc(4px + 0.5em + 0.6em);  /* 4px + widthAndHeight + (2 * border) */
+			margin-bottom: calc(4px + 0.5em + 0.6em); /* 4px + widthAndHeight + (2 * border) */
 
 			.star {
-				height: 0.5vmin;
-				width: 0.5vmin;
+				height: 0.5em;
+				width: 0.5em;
 				background-color: #fff;
-				border: 4px solid #000;
-				border-radius: 0.75vmin;
+				border: 0.30em solid #f0f;
+				border-radius: 50%;
 				min-width: 1px;
 				min-height: 1px;
 				position: absolute;
@@ -78,8 +130,10 @@ body {
 			z-index: 100;
 
 			#game_title {
+				color: #124;
 				position: relative;
-				flex: 1 1 65%;
+				flex: 1 1 60%;
+				order: 1;
 				display: inline-block;
 				padding: 5px 60px 5px 10px;
 				white-space: nowrap;
@@ -100,15 +154,27 @@ body {
 				z-index: -1;
 			}
 
+			#game_status:empty ~ #game_title {
+				min-width: 100%;
+			}
+
 			#game_status {
-				flex: 1 1 35%;
+				flex: 1 1 40%;
+				order: 2;
 				max-width: 70%;
 				text-align: center;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				overflow: hidden;
 				padding: 5px 20px 5px 10px;
+			}
+
+			#game_status.pause {
 				color: #D44;
+			}
+
+			#game_status:empty {
+				display: none;
 			}
 		}
 
@@ -127,7 +193,7 @@ body {
 	}
 }
 
-@media (max-width: 845px) {
+/*@media (max-width: 845px) {
 	body {
 		flex-flow: column;
 	}
@@ -150,4 +216,4 @@ body {
 			flex: 0 0 75px;
 		}
 	}
-}
+}*/

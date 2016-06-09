@@ -11,7 +11,7 @@ $(document).ready(
 		timeNow = new Date(data.now) || 0;
 		localTimeCorrection = timeNow.valueOf() - (new Date).valueOf();
 		stars = data.stars || [];
-		players = data.players || {};
+		players = data.players || [];
 
 		if (stars.length)
 		{
@@ -56,11 +56,48 @@ $(document).ready(
 					if (typeof star.player != "undefined" && star.player != -1 &&
 						typeof players[star.player] != "undefined")
 					{
-						starElement.css('border-color', players[star.player].color);
+						starElement.css("border-color", players[star.player].color);
 					}
 					else
 					{
-						starElement.css('border-color', "#000");
+						starElement.css("border-color", "#000");
+					}
+				}
+			}
+		}
+
+		if (players.length)
+		{
+			var playerContainer = $("#pane_left");
+			if (playerContainer.length)
+			{
+				for (var pl = 0; pl < players.length; ++pl)
+				{
+					var player = players[pl];
+					var playerElement = $(".player[data-player-id='" + player.uid + "']");
+					if (!playerElement.length)
+					{
+						playerElement = $("#player_template").clone();
+						playerElement.removeAttr("id");
+						playerElement.attr("data-player-id", player.uid);
+						playerContainer.append(playerElement);
+					}
+
+					// Set player order, by rank
+					playerElement.css('order', player.rank);
+
+					// Set player's name
+					var name = playerElement.find(".player_name");
+					if (name.length)
+					{
+						name.html(player.name);
+					}
+
+					// Set player's ring color
+					var ring = playerElement.find(".player_ring");
+					if (ring.length)
+					{
+						ring.css("border-color", player.color);
 					}
 				}
 			}
@@ -95,6 +132,7 @@ function timeToProduction()
  */
 function timeToTick(galacticCycle)
 {
+	// Use wacky formula from the game to determine the time
 	return formatTime((60000 * tickRate * galacticCycle) - (60000 * tickFragment * tickRate) - ((new Date).valueOf() - timeNow.valueOf()) - localTimeCorrection);
 }
 
@@ -105,8 +143,16 @@ function timeToTick(galacticCycle)
  */
 function formatTime(time)
 {
-	var timeInSeconds = time / 1000, timeString = '';
+	var timeInSeconds = time / 1000;
+	var timeString = '';
 
+	// Time cannot be negative
+	if (timeInSeconds < 0)
+	{
+		timeInSeconds = 0;
+	}
+
+	// Loop through each divisor (days, hours, minutes, seconds) and generate the formatting
 	[86400, 3600, 60, 1].forEach(
 		function(divisor)
 		{

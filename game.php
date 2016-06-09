@@ -1,7 +1,7 @@
 <?php
 define("NP2_CACHE_DIR", __DIR__ . "/data");
 define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
-define("NP2_CACHE_EXPIRE", 300); // 5 minutes
+define("NP2_CACHE_EXPIRE", 0); // 5 minutes
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
 require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";
@@ -139,6 +139,9 @@ class Np2_Game
 			$playerCount = count($universe['players']);
 			$players_rekeyed = [];
 
+			// This array is used to determine ranking
+			$rank = [];
+
 			foreach ($universe['players'] as $pIndex => &$player)
 			{
 				// Strip private information
@@ -167,6 +170,34 @@ class Np2_Game
 				$player['color'] = Color::getColor($colorIndex);
 
 				$players_rekeyed[$player['uid']] = $player;
+				$rank[] = ["player" => $player['uid'], "stars" => $player['total_stars'], "ships" => $player['total_strength']];
+			}
+
+			// Rank the players
+			usort(
+				$rank,
+				function ($a, $b)
+				{
+					if ($a['stars'] < $b['stars'] || ($a['stars'] == $b['stars'] && $a['ships'] < $b['ships']))
+					{
+						return 1;
+					}
+					elseif ($a['stars'] == $b['stars'] && $a['ships'] == $b['ships'])
+					{
+						return 0;
+					}
+					else
+					{
+						return -1;
+					}
+				}
+			);
+
+			// Add the ranks back into the player data
+			// Add 1 to the index to make rankings start at 1.
+			foreach ($rank as $index => $player_rank)
+			{
+				$players_rekeyed[$player_rank['player']]['rank'] = $index + 1;
 			}
 
 			$universe['players'] = $players_rekeyed;

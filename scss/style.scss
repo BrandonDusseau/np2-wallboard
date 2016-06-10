@@ -92,9 +92,10 @@ body {
 		flex: 1 1 auto;
 		order: 1;
 		overflow: hidden;
+		position: relative;
 
 		#star_container {
-			position: relative;
+			position: absolute;
 			font-size: 1.75vmin;
 			width: calc(100% - 1.0em - 0.6em - 2px);  /* 100% - (3 * (width - border) - 2px) */
 			height: calc(100% - 1.0em - 0.6em - 2px); /* 100% - (3 * (height - border) - 2px) */

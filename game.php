@@ -1,7 +1,7 @@
 <?php
 define("NP2_CACHE_DIR", __DIR__ . "/data");
 define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
-define("NP2_CACHE_EXPIRE", 0); // 5 minutes
+define("NP2_CACHE_EXPIRE", 300); // 5 minutes
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
 require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";
@@ -158,16 +158,21 @@ class Np2_Game
 				}
 
 				// Calculate the player's color
-				// If there are few enough players, shift the colors a little
-				// to better match the game.
-				$colorIndex = floor(64 / $playerCount) * $pIndex;
-				if ($playerCount < 59)
+				// For 8 players or less, use the game's original 8-color palette.
+				// Otherwise, use a 64-color palette.
+				if ($playerCount <= 8)
 				{
-					$colorIndex += 4;
+					$palette = 8;
+					$colorIndex = $pIndex;
+				}
+				else
+				{
+					$palette = 64;
+					$colorIndex = floor(64 / $playerCount) * $pIndex;
 				}
 
 				// Inject player colors
-				$player['color'] = Color::getColor($colorIndex);
+				$player['color'] = Color::getColor($colorIndex, $palette);
 
 				$players_rekeyed[$player['uid']] = $player;
 				$rank[] = ["player" => $player['uid'], "stars" => $player['total_stars'], "ships" => $player['total_strength']];

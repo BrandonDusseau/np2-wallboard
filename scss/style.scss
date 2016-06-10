@@ -29,19 +29,20 @@ body {
 	.player {
 		background-color: #136;
 		flex: 1 1 auto;
-		margin: 1px 0;
+		margin: 2px 0;
 		display: flex;
+		flex-flow: column;
 
 		.player_head {
-			flex: 1 1 auto;
+			flex: 1 1 50%;
 			font-size: 5vmin;
 			position: relative;
 
 			.player_head_inner {
 				position: absolute;
-				width: 100%;
 				top: 50%;
 				@include translateY(-50%);
+				width: 100%;
 
 				.player_ring {
 					display: inline-block;
@@ -63,11 +64,50 @@ body {
 					text-overflow: ellipsis;
 					vertical-align: middle;
 				}
+
+				.player_name.dead {
+					color: #124;
+				}
 			}
 		}
 
 		.player_stats {
-			flex: 0 1 auto;
+			background-color: #124;
+			flex: 0 1 50%;
+			width: 100%;
+			display: flex;
+			font-size: 2.5vmin;
+
+			.stat {
+				background-color: #136;
+				flex: 1 1 50%;
+				position: relative;
+				margin-right: 1px;
+				margin-top: 1px;
+
+				.stat-inner {
+					position: absolute;
+					top: 50%;
+					width: 100%;
+					@include translateY(-50%);
+					display: flex;
+					flex-flow: row nowrap;
+
+					.stat-icon {
+						flex: 0 0 1.4em;
+						color: #27E;
+					}
+
+					span {
+						flex: 1 0 auto;
+						text-align: center;
+					}
+				}
+			}
+
+			.stat:last-of-type {
+				margin-right: 0;
+			}
 		}
 
 		.player_tech {

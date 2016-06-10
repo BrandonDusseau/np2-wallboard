@@ -5,7 +5,8 @@ Thumbs.db
 
 # Gross compiled stuff
 .sass-cache
-css
+css/*
+!css/fontello-embedded.css
 js/*.min.*
 !js/jquery.min.js
 vendor

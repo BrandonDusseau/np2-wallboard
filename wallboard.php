@@ -2,13 +2,12 @@
 require_once __DIR__ . "/game.php";
 $gameInfoString = Np2_Game::getGameInfo($_GET['game'], !empty($_GET['nocache']));
 $gameInfo = json_decode($gameInfoString, true);
-//die(str_replace("\n", "<br>", preg_replace("/\ /", "&nbsp;", var_export(array_keys(array_diff_key($gameInfo['stars'][4], $gameInfo['stars'][3])), true))));
-//die(str_replace("\n", "<br>", preg_replace("/\ /", "&nbsp;", var_export($gameInfo['stars'], true))));
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/fontello-embedded.css" />
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/wallboard.js"></script>
 	<title>NP2 Wallboard</title>
@@ -24,8 +23,38 @@ $gameInfo = json_decode($gameInfoString, true);
 					<div class="player_name"></div>
 				</div>
 			</div>
-			<div class="player_stats"></div>
-			<div class="player_tech"></div>
+			<div class="player_stats">
+				<div class="stat stars">
+					<div class="stat-inner">
+						<div class="stat-icon icon-star"></div>
+						<span></span>
+					</div>
+				</div>
+					<div class="stat ships">
+						<div class="stat-inner">
+							<div class="stat-icon icon-rocket"></div>
+							<span></span>
+						</div>
+					</div>
+				<div class="stat economy">
+					<div class="stat-inner">
+						<div class="stat-icon icon-dollar"></div>
+						<span></span>
+					</div>
+				</div>
+				<div class="stat industry">
+					<div class="stat-inner">
+						<div class="stat-icon icon-tools"></div>
+						<span></span>
+					</div>
+				</div>
+				<div class="stat science">
+					<div class="stat-inner">
+						<div class="stat-icon icon-college"></div>
+						<span></span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="pane_right">

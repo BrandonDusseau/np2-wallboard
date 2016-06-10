@@ -1,4 +1,4 @@
-var data, productionRate, productionCounter, tickRate, tickFragment, timeNow, localTimeCorrection, stars, players;
+var data, productionRate, productionCounter, tickRate, tickFragment, timeNow, localTimeCorrection, stars, players, paused;
 
 $(document).ready(
 	function ()
@@ -12,6 +12,7 @@ $(document).ready(
 		localTimeCorrection = timeNow.valueOf() - (new Date).valueOf();
 		stars = data.stars || [];
 		players = data.players || [];
+		paused = data.paused || false;
 
 		if (stars.length)
 		{
@@ -91,6 +92,11 @@ $(document).ready(
 					if (name.length)
 					{
 						name.html(player.name);
+						name.removeClass("dead");
+						if (player.conceded)
+						{
+							name.addClass("dead");
+						}
 					}
 
 					// Set player's ring color
@@ -99,6 +105,41 @@ $(document).ready(
 					{
 						ring.css("border-color", player.color);
 					}
+
+					// Set player's star stat
+					var starEl = playerElement.find('.stat.stars span');
+					if (starEl.length)
+					{
+						starEl.html(player.total_stars);
+					}
+
+					// Set player's ships stat
+					var shipEl = playerElement.find('.stat.ships span');
+					if (shipEl.length)
+					{
+						shipEl.html(player.total_strength);
+					}
+
+					// Set player's econ stat
+					var econEl = playerElement.find('.stat.economy span');
+					if (econEl.length)
+					{
+						econEl.html(player.total_economy);
+					}
+
+					// Set player's industry stat
+					var indEl = playerElement.find('.stat.industry span');
+					if (indEl.length)
+					{
+						indEl.html(player.total_industry);
+					}
+
+					// Set player's science stat
+					var eciEl = playerElement.find('.stat.science span');
+					if (eciEl.length)
+					{
+						eciEl.html(player.total_science);
+					}
 				}
 			}
 		}
@@ -106,10 +147,27 @@ $(document).ready(
 		$("#game_title").html(data.name);
 		$("#game_timer").html(timeToProduction());
 
+		// Update game status indicator
+		if (!paused)
+		{
+			$("#game_status").removeClass("paused");
+			$("#game_status").html(timeToTick(1));
+		}
+		else
+		{
+			$("#game_status").addClass("paused");
+			$("#game_status").html("PAUSED");
+		}
+
 		window.setInterval(
 			function ()
 			{
 				$("#game_timer").html(timeToProduction());
+
+				if (!paused)
+				{
+					$("#game_status").html(timeToTick(1));
+				}
 			},
 			500
 		);
@@ -127,18 +185,18 @@ function timeToProduction()
 
 /**
  * Returns time to the next tick.
- * @param  {int} galacticCycle Current status of the galactic cycle.
+ * @param  {int} ticks Number of ticks to which time should be calculated.
  * @return {string} Formatted time to tick.
  */
-function timeToTick(galacticCycle)
+function timeToTick(ticks)
 {
 	// Use wacky formula from the game to determine the time
-	return formatTime((60000 * tickRate * galacticCycle) - (60000 * tickFragment * tickRate) - ((new Date).valueOf() - timeNow.valueOf()) - localTimeCorrection);
+	return formatTime((60000 * tickRate * ticks) - (60000 * tickFragment * tickRate) - ((new Date).valueOf() - timeNow.valueOf()) - localTimeCorrection);
 }
 
 /**
  * Outputs time in seconds in [DD:]HH:MM:SS format
- * @param  {int} time Time to convert.
+ * @param  {int} time Time to convert in milliseconds.
  * @return {string} Converted time.
  */
 function formatTime(time)

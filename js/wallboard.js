@@ -155,17 +155,16 @@ $(document).ready(
 		}
 		else
 		{
-			$("#game_status").addClass("paused");
+			$("#game_status").addClass("pause");
 			$("#game_status").html("PAUSED");
 		}
 
 		window.setInterval(
 			function ()
 			{
-				$("#game_timer").html(timeToProduction());
-
 				if (!paused)
 				{
+					$("#game_timer").html(timeToProduction());
 					$("#game_status").html(timeToTick(1));
 				}
 			},

@@ -72,18 +72,18 @@ body {
 		display: flex;
 		flex-flow: column;
 
-		.player_head {
+		.player-head {
 			flex: 1 0 50%;
-			font-size: 5vmin;
+			font-size: 4vmin;
 			position: relative;
 
-			.player_head_inner {
+			.player-head-inner {
 				position: absolute;
 				top: 50%;
 				@include translateY(-50%);
 				width: 100%;
 
-				.player_ring {
+				.player-ring {
 					display: inline-block;
 					height: 0.5em;
 					width: 0.5em;
@@ -93,7 +93,7 @@ body {
 					vertical-align: middle;
 				}
 
-				.player_name {
+				.player-name {
 					display: inline-block;
 					margin-top: 0.2em;
 					padding-bottom: 0.3em;
@@ -110,7 +110,7 @@ body {
 			}
 		}
 
-		.player_stats {
+		.player-stats {
 			background-color: #124;
 			flex: 1 0 50%;
 			width: 100%;
@@ -148,14 +148,82 @@ body {
 				margin-right: 0;
 			}
 		}
-
-		.player_tech {
-			flex: 0 1 auto;
-		}
 	}
 
 	.player#player_template {
 		display: none;
+	}
+}
+
+#pane_left.player-minimal {
+	.player {
+		flex-flow: row nowrap;
+		margin: 1px 0;
+
+		.player-head {
+			flex-basis: 60%;
+			font-size: 4vmin;
+		}
+
+		.player-stats {
+			flex-basis: 40%;
+			font-size: 3.0vmin;
+
+			.stat {
+				margin: 0;
+				margin-left: 1px;
+				text-align: center;
+
+				.stat-inner {
+					flex-flow: column wrap;
+
+					.stat-icon {
+						margin-left: 0;
+						font-size: 2.5vmin;
+						flex: 0 1 auto;
+					}
+
+					span {
+						flex: 1 1 auto;
+					}
+				}
+			}
+
+			.stat.economy, .stat.industry, .stat.science {
+				display: none;
+			}
+		}
+	}
+}
+
+#pane_left.player-minimal-extreme {
+	@extend #pane_left.player-minimal;
+
+	.player {
+		margin: 0;
+		margin-bottom: 1px;
+
+		.player-head {
+			font-size: 2.75vmin;
+		}
+
+		.player-stats {
+			.stat {
+				.stat-inner {
+					flex-flow: row nowrap;
+					font-size: 2vmin;
+
+					.stat-icon {
+						flex: 0 0 1.55em;
+						font-size: inherit;
+					}
+
+					span {
+						font-size: inherit;
+					}
+				}
+			}
+		}
 	}
 }
 

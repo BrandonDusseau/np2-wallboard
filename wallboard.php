@@ -16,13 +16,13 @@
 	</div>
 	<div id="pane_left">
 		<div id="player_template" class="player">
-			<div class="player_head">
-				<div class="player_head_inner">
-					<div class="player_ring"></div>
-					<div class="player_name"></div>
+			<div class="player-head">
+				<div class="player-head-inner">
+					<div class="player-ring"></div>
+					<div class="player-name"></div>
 				</div>
 			</div>
-			<div class="player_stats">
+			<div class="player-stats">
 				<div class="stat stars">
 					<div class="stat-inner">
 						<div class="stat-icon icon-star"></div>

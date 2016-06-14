@@ -168,6 +168,17 @@
 			{
 				for (var pl = 0; pl < players.length; ++pl)
 				{
+					// Determine the size of the player elements
+					playerContainer.removeClass("player-minimal player-minimal-extreme");
+					if (players.length > 24)
+					{
+						playerContainer.addClass("player-minimal-extreme");
+					}
+					else if (players.length > 8)
+					{
+						playerContainer.addClass("player-minimal");
+					}
+
 					var player = players[pl];
 					var playerElement = $(".player[data-player-id='" + player.uid + "']");
 					if (!playerElement.length)
@@ -182,7 +193,7 @@
 					playerElement.css('order', player.rank);
 
 					// Set player's name
-					var name = playerElement.find(".player_name");
+					var name = playerElement.find(".player-name");
 					if (name.length)
 					{
 						name.html(player.name);
@@ -194,7 +205,7 @@
 					}
 
 					// Set player's ring color
-					var ring = playerElement.find(".player_ring");
+					var ring = playerElement.find(".player-ring");
 					if (ring.length)
 					{
 						ring.css("border-color", player.color);

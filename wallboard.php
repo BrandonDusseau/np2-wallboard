@@ -1,8 +1,3 @@
-<?php
-require_once __DIR__ . "/game.php";
-$gameInfoString = Np2_Game::getGameInfo($_GET['game'], !empty($_GET['nocache']));
-$gameInfo = json_decode($gameInfoString, true);
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,12 +54,13 @@ $gameInfo = json_decode($gameInfoString, true);
 	</div>
 	<div id="pane_right">
 		<div id="pane_stars">
+			<div class="star-loader"></div>
 			<div id="star_container"></div>
 		</div>
 		<div id="pane_bottom">
 			<div class="title-area">
 				<div id="game_status"></div>
-				<div id="game_title"></div>
+				<div id="game_title">&nbsp;</div>
 			</div>
 			<div class="timer-container">
 				<div id="game_timer"></div>

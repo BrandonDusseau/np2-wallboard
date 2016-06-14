@@ -1,6 +1,7 @@
 @import "compass/reset";
 @import "compass/css3/images";
 @import "compass/css3/transform";
+@import "compass/css3/opacity";
 @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700,500italic,500,400italic);
 
 html, body
@@ -153,6 +154,21 @@ body {
 				min-height: 1px;
 				position: absolute;
 			}
+		}
+
+		.star-loader {
+			background: #000 image-url("loading.gif", false, false) 50% 50% no-repeat;
+			width: 116px;
+			height: 116px;
+			margin: 5px;
+			border: 3px solid #138;
+			border-radius: 116px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			@include translate(-50%, -50%);
+			@include opacity(0.8);
+			z-index: 1000;
 		}
 	}
 

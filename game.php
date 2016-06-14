@@ -117,20 +117,24 @@ class Np2_Game
 		$client = new TritonClient($config['username'], $config['password']);
 		if (!$client->authenticate())
 		{
-			return json_encode(array("error" => "Login failed; check your credentials."));
+			ob_end_clean();
+			return json_encode(array("error" => "Login failed. The credentials may be incorrect or the connections to the server are being throttled."));
 		}
 
 		$game = $client->GetGame($gameId);
 		if (!$game)
 		{
-			return json_encode(array("error" => "Could not load the game! Perhaps the Game ID is incorrect."));
+			ob_end_clean();
+			return json_encode(array("error" => "The specified game could not be loaded. Perhaps the game ID is incorrect?"));
 		}
 
 		$universe = $game->getFullUniverse();
 		if (!$universe)
 		{
+			ob_end_clean();
 			return json_encode(array("error" => "Internal error: Could not load universe"));
 		}
+
 		ob_end_clean();
 
 		// Modify player information to remove private data and add attributes

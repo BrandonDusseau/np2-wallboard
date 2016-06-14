@@ -9,7 +9,11 @@
 	<meta charset="UTF-8" />
 </head>
 <body>
-	<div id="data" style="display:none;"><?php echo $gameInfoString; ?></div>
+	<div id="error">
+		<div class="icon-attention-alt"></div>
+		<div id="error_text"></div>
+		<div class="reload-time" data-reload-msg="Retrying in %seconds% seconds..."></div>
+	</div>
 	<div id="pane_left">
 		<div id="player_template" class="player">
 			<div class="player_head">

@@ -12,3 +12,6 @@ A wallboard for tracking stats for Neptune's Pride 2: Triton. More details will 
 
 ## Development Requirements ##
 Compass and a JavaScript uglifier of your choice.
+
+## Attributions ##
+This project utilizes icon fonts found on [Fontello](http://fontello.com). License info available in LICENSE file. Thanks!

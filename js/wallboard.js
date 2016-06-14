@@ -1,9 +1,14 @@
 (function ()
 {
 	var data = {};               // Data from the API
-	var refreshInterval = null;  // Interval timer for refreshing data
+
 	var timerInterval = null;    // Interval timer for updating the clock
 	var refreshing = false;      // Whether data is currently refreshing
+
+	var disallowUpdate = false;  // Disallows automatic updates (used for errors).
+	var reloadTimer = 0;         // Timer used to reload data in case of error
+	var errorInterval = null;    // Interval timer for error reload.
+
 	var timeNow = 0;             // The current time according to server data
 	var localTimeCorrection = 0; // Correction between server time and local time.
 
@@ -13,7 +18,16 @@
 			updateData();
 
 			// Reload data every minute
-			refreshInterval = window.setInterval(updateData, 60000);
+			window.setInterval(
+				function()
+				{
+					if (!disallowUpdate)
+					{
+						updateData();
+					}
+				},
+				60000
+			);
 		}
 	);
 
@@ -37,7 +51,7 @@
 		var gameId = getUrlParameter('game');
 		if (!gameId)
 		{
-			// TODO: Throw an error here
+			doError("No game specified", true);
 			return;
 		}
 
@@ -63,8 +77,7 @@
 
 				if (json.error)
 				{
-					// TODO: Throw an error here
-					console.log("Received an error while trying to load data");
+					doError("An error occurred<br /><span>" + json.error + "</span>");
 				}
 				else
 				{
@@ -79,8 +92,7 @@
 				// Remove the loading indicator
 				$("#pane_stars .star-loader").fadeOut();
 
-				// TODO: Throw an error here
-				console.log("Failed to load data");
+				doError("Unable to load data from the server.")
 				refreshing = false;
 			}
 		});
@@ -332,6 +344,85 @@
 	}
 
 	/**
+	 * Handles error messages
+	 * @param {string} message Error message to display; blank will omit display entirely.
+	 * @param {bool} noReload Do not try to reload the wallboard data.
+	 * @return {undefined}
+	 */
+	 function doError(message, noReload)
+	 {
+		// Clear the reload timer in case it is already running
+		if (errorInterval != null)
+		{
+			window.clearInterval(errorInterval);
+			errorInterval = null;
+		}
+
+		// Disable the usual refresh timer and run our own
+		if (!noReload)
+		{
+			disallowUpdate = true;
+
+			reloadTimer = 30;
+			var retryCounter = $("#error .reload-time");
+			retryCounter.html(retryCounter.data("reload-msg").replace("%seconds%", reloadTimer));
+
+			// Set a timer
+			errorInterval = window.setInterval(
+				function ()
+				{
+					--reloadTimer;
+
+					// Update the error dialog
+					var retryCounter = $("#error .reload-time");
+					retryCounter.html(retryCounter.data("reload-msg").replace("%seconds%", reloadTimer));
+
+					// When the timer runs out, reload data
+					if (reloadTimer == 0)
+					{
+						dismissError();
+						updateData(true);
+					}
+				},
+				1000
+			);
+		}
+
+		if (message)
+		{
+			$("#error_text").html(message);
+			$("#error").fadeIn(300);
+		}
+	}
+
+	/**
+	 * Dismisses any existing error
+	 * @return {undefined}
+	 */
+	function dismissError()
+	{
+		reloadTimer = 0;
+		disallowUpdate = false;
+
+		// Clear the reload timer
+		if (errorInterval != null)
+		{
+			window.clearInterval(errorInterval);
+			errorInterval = null;
+		}
+
+		// Reset dialog state
+		$("#error").fadeOut(
+			300,
+			function ()
+			{
+				$("#error_text").html("");
+				$("#error .reload-time").html("");
+			}
+		);
+	}
+
+	/**
 	 * Gets a parameter from the URL
 	 * @param {string} sParam Parameter name.
 	 * @return {string|bool} Parameter if present and set, true if present and not set,
@@ -355,7 +446,5 @@
 		}
 
 		return false;
-	};
-
-	window.updateData = updateData;
+	}
 })();

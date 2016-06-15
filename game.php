@@ -1,7 +1,7 @@
 <?php
 define("NP2_CACHE_DIR", __DIR__ . "/data");
 define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
-define("NP2_CACHE_EXPIRE", -1); // 5 minutes (0 for always use cache, -1 to never use cache)
+define("NP2_CACHE_EXPIRE", 0); // 5 minutes (0 for always use cache, -1 to never use cache)
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
 require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";

@@ -104,8 +104,12 @@ body {
 					vertical-align: middle;
 				}
 
+				.player-name.ready {
+					color: #5D5;
+				}
+
 				.player-name.dead {
-					color: #124;
+					color: #666;
 				}
 			}
 		}

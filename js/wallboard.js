@@ -202,6 +202,12 @@
 						{
 							name.addClass("dead");
 						}
+
+						name.removeClass("ready icon-ok");
+						if (player.ready)
+						{
+							name.addClass("ready icon-ok");
+						}
 					}
 
 					// Set player's ring color

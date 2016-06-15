@@ -108,7 +108,12 @@
 		var players = data.players || [];
 		var paused = data.paused || false;
 
-		if (stars.length)
+		// The game is dark if the number of stars given does not match the total number of stars.
+		// This could be unreliable if the account used to fetch data can see all the stars,
+		// but it's all we've got.
+		var darkGame = stars.length != data.total_stars;
+
+		if (stars.length && !darkGame)
 		{
 			var starContainer = $("#star_container");
 			if (starContainer.length)

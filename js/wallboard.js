@@ -197,16 +197,21 @@
 					if (name.length)
 					{
 						name.html(player.name);
+
+						// If player has conceded, mark them dead.
 						name.removeClass("dead");
 						if (player.conceded)
 						{
 							name.addClass("dead");
 						}
-
-						name.removeClass("ready icon-ok");
-						if (player.ready)
+						else
 						{
-							name.addClass("ready icon-ok");
+							// If player is ready in a turn-based game, mark it.
+							name.removeClass("ready icon-ok");
+							if (player.ready)
+							{
+								name.addClass("ready icon-ok");
+							}
 						}
 					}
 
@@ -380,7 +385,7 @@
 		{
 			disallowUpdate = true;
 
-			reloadTimer = 30;
+			reloadTimer = 15;
 			var retryCounter = $("#error .reload-time");
 			retryCounter.html(retryCounter.data("reload-msg").replace("%seconds%", reloadTimer));
 

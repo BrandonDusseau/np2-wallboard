@@ -160,7 +160,7 @@
 					}
 					else
 					{
-						starElement.css("border-color", "#000");
+						starElement.css("border-color", "transparent");
 					}
 				}
 			}

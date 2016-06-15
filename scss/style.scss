@@ -239,6 +239,8 @@ body {
 	overflow: hidden;
 
 	#pane_stars {
+		background: #000 image-url("bg.jpg", false, false) 50% 50% no-repeat;
+		background-size: cover;
 		background-color: #000;
 		flex: 1 1 auto;
 		order: 1;
@@ -248,21 +250,34 @@ body {
 		#star_container {
 			position: absolute;
 			font-size: 1.75vmin;
-			width: calc(100% - 1.0em - 0.6em - 2px);  /* 100% - (3 * (width - border) - 2px) */
-			height: calc(100% - 1.0em - 0.6em - 2px); /* 100% - (3 * (height - border) - 2px) */
-			margin: 4px;                              /* 4px buffer */
-			margin-right: calc(4px + 0.5em + 0.6em);  /* 4px + widthAndHeight + (2 * border) */
-			margin-bottom: calc(4px + 0.5em + 0.6em); /* 4px + widthAndHeight + (2 * border) */
+			width:  calc(100% - 1.7em - 0.4em);          /* 100% - (2 * (width - border)) */
+			height: calc(100% - 1.7em - 0.4em);          /* 100% - (2 * (height - border)) */
+			margin: 0.4em;                               /* 4em buffer */
+			margin-right:  calc(0.4em + 0.85em + 0.4em); /* 4em + widthAndHeight + (2 * border) */
+			margin-bottom: calc(0.4em + 0.85em + 0.4em); /* 4em + widthAndHeight + (2 * border) */
 
 			.star {
-				height: 0.5em;
-				width: 0.5em;
-				background-color: #fff;
-				border: 0.30em solid #f0f;
-				border-radius: 50%;
-				min-width: 1px;
-				min-height: 1px;
 				position: absolute;
+				height: 0.85em;
+				min-height: 1px;
+				width: 0.85em;
+				min-width: 1px;
+				background-color: transparent;
+				border: 0.2em solid transparent;
+				border-radius: 50%;
+			}
+
+			.star::after {
+				content: '';
+				height: 0.4em;
+				width: 0.4em;
+				background-color: #FFF;
+				border-radius: 50%;
+				position: absolute;
+				top:  50%;
+				left:  50%;
+				@include translate(-50%, -50%);
+				box-shadow: 0 0 0.1em 0 #FFF;
 			}
 		}
 

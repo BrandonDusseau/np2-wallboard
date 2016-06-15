@@ -2,6 +2,7 @@
 @import "compass/css3/images";
 @import "compass/css3/transform";
 @import "compass/css3/opacity";
+@import "compass/css3/box-shadow";
 @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700,500italic,500,400italic);
 
 html, body
@@ -277,7 +278,7 @@ body {
 				top:  50%;
 				left:  50%;
 				@include translate(-50%, -50%);
-				box-shadow: 0 0 0.1em 0 #FFF;
+				@include single-box-shadow(0, 0, 0.1em, 0, #FFF);
 			}
 		}
 

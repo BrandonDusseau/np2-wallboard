@@ -1,7 +1,7 @@
 <?php
 define("NP2_CACHE_DIR", __DIR__ . "/data");
 define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
-define("NP2_CACHE_EXPIRE", -1); // 5 minutes (0 for always use cache, -1 to never use cache)
+define("NP2_CACHE_EXPIRE", 300); // 5 minutes (0 for always use cache, -1 to never use cache)
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
 require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";
@@ -96,13 +96,32 @@ class Np2_Game
 		}
 
 		// Attempt to read data from cache first
-		$cacheContent = self::readCachedValue($gameId);
-		if (!$ignoreCache && !empty($cacheContent))
+		$cache = self::readCachedValue($gameId);
+		if (!$ignoreCache && !empty($cache))
 		{
-			// Replace cached "now" with current time.
-			$cacheContent['now'] = round(microtime(true) * 1000);
+			// Get the current time and use it to recalculate some time-dependent properties
+			$current_time = round(microtime(true) * 1000);
+			$time_diff = $current_time - $cache['now'];
+			$minutes = $time_diff / 60000;
 
-			return json_encode($cacheContent, JSON_NUMERIC_CHECK);
+			// Recalculate tick information
+			$tick_diff = ($cache['tick'] + $cache['tick_fragment']) + ($minutes / $cache['tick_rate']);
+			$tick = floor($tick_diff);
+			$tick_fragment = $tick_diff - $tick;
+
+			// Recalculate production information
+			$tick_diff_in_hours = ($tick_diff * $cache['tick_rate']) / 60;
+			$productions = floor($tick_diff_in_hours / $cache['production_rate']);
+			$production_counter = floor($tick_diff_in_hours % $cache['production_rate']);
+
+			// Inject the new values into the data we're returning
+			$cache['now'] = $current_time;
+			$cache['tick'] = $tick;
+			$cache['tick_fragment'] = $tick_fragment;
+			$cache['productions'] = $productions;
+			$cache['production_counter'] = $production_counter;
+
+			return json_encode($cache, JSON_NUMERIC_CHECK);
 		}
 
 		// Try to load configuration file
@@ -210,6 +229,14 @@ class Np2_Game
 			}
 
 			$universe['players'] = $players_rekeyed;
+		}
+
+		// The game is dark if the number of stars given does not match the total number of stars.
+		// This could be unreliable if the account used to fetch data can see all the stars,
+		// but it's all we've got.
+		if ($universe['total_stars'] != count($universe['stars']))
+		{
+			$universe['stars'] = [];
 		}
 
 		// Modify star information to remove private data, and normalize the key names

@@ -92,7 +92,7 @@
 				// Remove the loading indicator
 				$("#pane_stars .star-loader").fadeOut();
 
-				doError("Unable to load data from the server.")
+				doError("Unable to load data from the server.");
 				refreshing = false;
 			}
 		});
@@ -108,12 +108,7 @@
 		var players = data.players || [];
 		var paused = data.paused || false;
 
-		// The game is dark if the number of stars given does not match the total number of stars.
-		// This could be unreliable if the account used to fetch data can see all the stars,
-		// but it's all we've got.
-		var darkGame = stars.length != data.total_stars;
-
-		if (stars.length && !darkGame)
+		if (stars.length)
 		{
 			var starContainer = $("#star_container");
 			if (starContainer.length)
@@ -401,7 +396,6 @@
 					--reloadTimer;
 
 					// Update the error dialog
-					var retryCounter = $("#error .reload-time");
 					retryCounter.html(retryCounter.data("reload-msg").replace("%seconds%", reloadTimer));
 
 					// When the timer runs out, reload data

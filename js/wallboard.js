@@ -307,6 +307,9 @@
 			var winnerId = (winnerPlayer.length ? winnerPlayer.data("player-id") : -1);
 			$("#game_timer").html("<div class='winner'><div class='win-heading'>Winner</div>" +
 				(winnerId != -1 ? data.players[winnerId].name : "[Player not found]") + "</div>");
+
+			// If the game is over, don't bother reloading data.
+			clearRefreshTimer();
 		}
 		else
 		{

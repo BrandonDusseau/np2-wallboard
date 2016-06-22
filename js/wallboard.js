@@ -131,7 +131,6 @@
 		var paused = data.paused || false;
 		var ended = data.game_over || false;
 		var waiting = !data.started;
-		console.log(data);
 
 		if (stars.length)
 		{

@@ -104,15 +104,28 @@ class Np2_Game
 			$time_diff = $current_time - $cache['now'];
 			$minutes = $time_diff / 60000;
 
-			// Recalculate tick information
-			$tick_diff = ($cache['tick'] + $cache['tick_fragment']) + ($minutes / $cache['tick_rate']);
-			$tick = floor($tick_diff);
-			$tick_fragment = $tick_diff - $tick;
+			// Recalculate time-based information if the cached state isn't paused. If it is, we
+			// can't reliably calculate anything based on the difference in time.
 
-			// Recalculate production information
-			$tick_diff_in_hours = ($tick_diff * $cache['tick_rate']) / 60;
-			$productions = floor($tick_diff_in_hours / $cache['production_rate']);
-			$production_counter = floor($tick_diff_in_hours % $cache['production_rate']);
+			if (!$cache['paused'] && $cache['started'])
+			{
+				// Recalculate tick information
+				$tick_diff = ($cache['tick'] + $cache['tick_fragment']) + ($minutes / $cache['tick_rate']);
+				$tick = floor($tick_diff);
+				$tick_fragment = $tick_diff - $tick;
+
+				// Recalculate production information
+				$tick_diff_in_hours = ($tick_diff * $cache['tick_rate']) / 60;
+				$productions = floor($tick_diff_in_hours / $cache['production_rate']);
+				$production_counter = floor($tick_diff_in_hours % $cache['production_rate']);
+			}
+			else
+			{
+				$tick = $cache['tick'];
+				$tick_fragment = $cache['tick_fragment'];
+				$productions = $cache['productions'];
+				$production_counter = $cache['production_rate'];
+			}
 
 			// Inject the new values into the data we're returning
 			$cache['now'] = $current_time;

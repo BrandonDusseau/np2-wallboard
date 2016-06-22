@@ -130,6 +130,8 @@
 		var players = data.players || [];
 		var paused = data.paused || false;
 		var ended = data.game_over || false;
+		var waiting = !data.started;
+		console.log(data);
 
 		if (stars.length)
 		{
@@ -191,18 +193,14 @@
 			{
 				for (var pl = 0; pl < players.length; ++pl)
 				{
-					// Determine the size of the player elements
-					playerContainer.removeClass("player-minimal player-minimal-extreme");
-					if (players.length > 24)
+					var player = players[pl];
+
+					// Exclude player if name is not set - player is not ready.
+					if (player.name == "")
 					{
-						playerContainer.addClass("player-minimal-extreme");
-					}
-					else if (players.length > 8)
-					{
-						playerContainer.addClass("player-minimal");
+						continue;
 					}
 
-					var player = players[pl];
 					var playerElement = $(".player[data-player-id='" + player.uid + "']");
 					if (!playerElement.length)
 					{
@@ -281,6 +279,18 @@
 						eciEl.html(player.total_science);
 					}
 				}
+
+
+				// Determine the size of the player elements based on how many players are displayed.
+				playerContainer.removeClass("player-minimal player-minimal-extreme");
+				if ($(".player-container").length > 24)
+				{
+					playerContainer.addClass("player-minimal-extreme");
+				}
+				else if ($(".player-container").length > 8)
+				{
+					playerContainer.addClass("player-minimal");
+				}
 			}
 		}
 
@@ -293,7 +303,7 @@
 
 		// Update game status indicator and timer
 		$("#game_status").removeClass("pause");
-		if (paused)
+		if (paused && !waiting)
 		{
 			$("#game_status").addClass("pause");
 			$("#game_status").html("PAUSED");
@@ -310,6 +320,12 @@
 
 			// If the game is over, don't bother reloading data.
 			clearRefreshTimer();
+		}
+		else if (waiting)
+		{
+			$("#game_status").addClass("pause");
+			$("#game_status").html("WAITING...");
+			$("#game_timer").html("");
 		}
 		else
 		{

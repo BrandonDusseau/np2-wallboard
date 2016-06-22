@@ -235,7 +235,7 @@ body {
 #pane_right {
 	display: flex;
 	flex-flow: column;
-	flex: 1 0 70%;
+	flex: 1 1 70%;
 	min-width: 350px;
 	overflow: hidden;
 
@@ -371,6 +371,21 @@ body {
 				text-align: center;
 				vertical-align: middle;
 				font-size: 15vmin;
+
+				.winner {
+					margin-top: 1rem;
+					display: inline-block;
+					font-size: 9vmin;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					max-width: 85%;
+				}
+
+				.win-heading {
+					text-align: left;
+					font-size: 5vmin;
+				}
 			}
 		}
 	}

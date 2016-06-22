@@ -129,6 +129,7 @@
 		var stars = data.stars || [];
 		var players = data.players || [];
 		var paused = data.paused || false;
+		var ended = data.game_over || false;
 
 		if (stars.length)
 		{
@@ -212,6 +213,7 @@
 					}
 
 					// Set player order, by rank
+					playerElement.attr('data-rank', player.rank);
 					playerElement.css('order', player.rank);
 
 					// Set player's name
@@ -282,8 +284,6 @@
 			}
 		}
 
-		paused = false;
-
 		// Update the time
 		timeNow = new Date(data.now) || 0;
 		localTimeCorrection = timeNow.valueOf() - (new Date).valueOf();
@@ -291,24 +291,35 @@
 		$("#game_title").html(data.name);
 		$("#game_timer").html(formatTime(timeToProduction()));
 
-		// Update game status indicator
-		if (!paused)
-		{
-			$("#game_status").removeClass("paused");
-			$("#game_status").html(formatTime(timeToTick(1)));
-		}
-		else
+		// Update game status indicator and timer
+		$("#game_status").removeClass("pause");
+		if (paused)
 		{
 			$("#game_status").addClass("pause");
 			$("#game_status").html("PAUSED");
+			$("#game_timer").html(formatTime(timeToProduction()));
+		}
+		else if (ended)
+		{
+			$("#game_status").addClass("pause");
+			$("#game_status").html("GAME OVER");
+			var winnerPlayer = $(".player[data-rank=1]");
+			var winnerId = (winnerPlayer.length ? winnerPlayer.data("player-id") : -1);
+			$("#game_timer").html("<div class='winner'><div class='win-heading'>Winner</div>" +
+				(winnerId != -1 ? data.players[winnerId].name : "[Player not found]") + "</div>");
+		}
+		else
+		{
+			$("#game_status").html(formatTime(timeToTick(1)));
 		}
 
 		// Set a new timer to update the clocks
 		window.clearInterval(timerInterval);
-		timerInterval = window.setInterval(
-			function ()
-			{
-				if (!paused)
+
+		if (!paused && !ended)
+		{
+			timerInterval = window.setInterval(
+				function ()
 				{
 					var toTick = timeToTick(1);
 					var toProduction = timeToProduction();
@@ -321,10 +332,10 @@
 
 					$("#game_timer").html(formatTime(toProduction));
 					$("#game_status").html(formatTime(toTick));
-				}
-			},
-			500
-		);
+				},
+				500
+			);
+		}
 	}
 
 	/**

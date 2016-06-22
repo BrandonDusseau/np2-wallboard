@@ -3,9 +3,9 @@
 	var data = {};               // Data from the API
 
 	var timerInterval = null;    // Interval timer for updating the clock
+	var refreshInterval = null;  // The interval timer for refreshing game data
 	var refreshing = false;      // Whether data is currently refreshing
 
-	var disallowUpdate = false;  // Disallows automatic updates (used for errors).
 	var reloadTimer = 0;         // Timer used to reload data in case of error
 	var errorInterval = null;    // Interval timer for error reload.
 
@@ -16,20 +16,42 @@
 		function ()
 		{
 			updateData();
-
-			// Reload data every minute
-			window.setInterval(
-				function()
-				{
-					if (!disallowUpdate)
-					{
-						updateData();
-					}
-				},
-				60000
-			);
+			startRefreshTimer();
 		}
 	);
+
+	/**
+	 * Begins the timer to refresh data
+	 * @return {undefined}
+	 */
+	function startRefreshTimer()
+	{
+		// Clear any existing timer
+		clearRefreshTimer();
+
+		// Reload data every minute
+		refreshInterval = window.setInterval(
+			function()
+			{
+				updateData();
+			},
+			60000
+		);
+	}
+
+	/**
+	 * Terminates the timer to refresh data
+	 * @return {undefined}
+	 */
+	function clearRefreshTimer()
+	{
+		// Clear the interval, if it's set
+		if (refreshInterval != null)
+		{
+			window.clearInterval(refreshInterval);
+			refreshInterval = null;
+		}
+	}
 
 	/**
 	 * Updates the data used for the display
@@ -383,9 +405,10 @@
 		// Disable the usual refresh timer and run our own
 		if (!noReload)
 		{
-			disallowUpdate = true;
+			// Disable refreshing data
+			clearRefreshTimer();
 
-			reloadTimer = 15;
+			reloadTimer = 20;
 			var retryCounter = $("#error .reload-time");
 			retryCounter.html(retryCounter.data("reload-msg").replace("%seconds%", reloadTimer));
 
@@ -423,13 +446,15 @@
 	function dismissError()
 	{
 		reloadTimer = 0;
-		disallowUpdate = false;
 
 		// Clear the reload timer
 		if (errorInterval != null)
 		{
 			window.clearInterval(errorInterval);
 			errorInterval = null;
+
+			// If a reload timer is set, we have also disabled background reloading data, so restart it
+			startRefreshTimer();
 		}
 
 		// Reset dialog state

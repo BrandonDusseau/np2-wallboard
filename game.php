@@ -198,7 +198,7 @@ class Np2_Game
 				$player['color'] = Color::getColor($colorIndex, $palette);
 
 				$players_rekeyed[$player['uid']] = $player;
-				$rank[] = ["player" => $player['uid'], "stars" => $player['total_stars'], "ships" => $player['total_strength']];
+				$rank[] = ["player" => $player['uid'], "stars" => $player['total_stars'], "ships" => $player['total_strength'], "name" => $player['name']];
 			}
 
 			// Rank the players
@@ -206,17 +206,20 @@ class Np2_Game
 				$rank,
 				function ($a, $b)
 				{
+					// B ranks higher if A has fewer stars, or if A has fewer ships and stars are equal
 					if ($a['stars'] < $b['stars'] || ($a['stars'] == $b['stars'] && $a['ships'] < $b['ships']))
 					{
 						return 1;
 					}
-					elseif ($a['stars'] == $b['stars'] && $a['ships'] == $b['ships'])
-					{
-						return 0;
-					}
-					else
+					// A ranks higher if B has fewer stars, or if B has fewer ships and stars are equal
+					elseif ($a['stars'] > $b['stars'] || ($a['stars'] == $b['stars'] && $a['ships'] > $b['ships']))
 					{
 						return -1;
+					}
+					// Otherwise, everything is equal and we should just sort by name
+					else
+					{
+						return strnatcmp($a['name'], $b['name']);
 					}
 				}
 			);

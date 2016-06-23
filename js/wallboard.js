@@ -282,11 +282,11 @@
 
 				// Determine the size of the player elements based on how many players are displayed.
 				playerContainer.removeClass("player-minimal player-minimal-extreme");
-				if ($(".player-container").length > 24)
+				if ($(".player").length > 24)
 				{
 					playerContainer.addClass("player-minimal-extreme");
 				}
-				else if ($(".player-container").length > 8)
+				else if ($(".player").length > 8)
 				{
 					playerContainer.addClass("player-minimal");
 				}
@@ -328,7 +328,7 @@
 		}
 		else
 		{
-			$("#game_status").html(formatTime(timeToTick(1)));
+			$("#game_status").html(data.turn_based ? "" : formatTime(timeToTick(1)));
 		}
 
 		// Set a new timer to update the clocks
@@ -349,7 +349,7 @@
 					}
 
 					$("#game_timer").html(formatTime(toProduction));
-					$("#game_status").html(formatTime(toTick));
+					$("#game_status").html(data.turn_based ? "" : formatTime(timeToTick(1)));
 				},
 				500
 			);

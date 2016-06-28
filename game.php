@@ -1,7 +1,9 @@
 <?php
 define("NP2_CACHE_DIR", __DIR__ . "/data");
 define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
+define("NP2_AUTH_FILE", NP2_CACHE_DIR . "/auth_%suffix%.dat");
 define("NP2_CACHE_EXPIRE", 300); // 5 minutes (0 for always use cache, -1 to never use cache)
+define("NP2_AUTH_EXPIRE", 86400); // 24 hours
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
 require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";
@@ -146,15 +148,42 @@ class Np2_Game
 		// Fetch data from the API
 		ob_start();
 		$client = new TritonClient($config['username'], $config['password']);
-		if (!$client->authenticate())
+
+		// Attempt to load auth token from cache and inject it into the client.
+		$authFile = str_replace("%suffix%", $config['username'], NP2_AUTH_FILE);
+		if (file_exists($authFile) && time() - filemtime($authFile) <= NP2_AUTH_EXPIRE)
 		{
-			ob_end_clean();
-			return json_encode(array("error" => "Login failed. The credentials may be incorrect or the connections to the server are being throttled."));
+			$authToken = @file_get_contents($authFile);
+			if (!empty($authToken))
+			{
+				$client->auth_cookie = $authToken;
+				$client->logged_in = true;
+			}
+		}
+
+		// If not logged in already, attempt to authenticate.
+		if (!$client->logged_in)
+		{
+			echo "Client is not logged in.";
+			if (!$client->authenticate())
+			{
+				ob_end_clean();
+				return json_encode(array("error" => "Login failed; the credentials may be incorrect."));
+			}
+
+			// Try to save the cookie data to cache
+			file_put_contents($authFile, $client->auth_cookie);
 		}
 
 		$game = $client->GetGame($gameId);
 		if (!$game)
 		{
+			// If we used an auth token and failed on the first request, assume it is bad and log in again on the next attempt.
+			if (!empty($authToken))
+			{
+				unlink($authFile);
+			}
+
 			ob_end_clean();
 			return json_encode(array("error" => "The specified game could not be loaded. Perhaps the game ID is incorrect?"));
 		}

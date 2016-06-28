@@ -131,6 +131,7 @@
 		var paused = data.paused || false;
 		var ended = data.game_over || false;
 		var waiting = !data.started;
+		var turnBased = data.turn_based || false;
 
 		if (stars.length)
 		{
@@ -298,7 +299,7 @@
 		localTimeCorrection = timeNow.valueOf() - (new Date).valueOf();
 
 		$("#game_title").html(data.name);
-		$("#game_timer").html(formatTime(timeToProduction()));
+		$("#game_timer").html(formatTime(!turnBased ? timeToProduction() : timeToTurnTimeout()));
 
 		// Update game status indicator and timer
 		$("#game_status").removeClass("pause");
@@ -328,7 +329,7 @@
 		}
 		else
 		{
-			$("#game_status").html(data.turn_based ? "" : formatTime(timeToTick(1)));
+			$("#game_status").html(turnBased ? formatTime(timeToProduction(), true, true) : formatTime(timeToTick(1)));
 		}
 
 		// Set a new timer to update the clocks
@@ -341,15 +342,16 @@
 				{
 					var toTick = timeToTick(1);
 					var toProduction = timeToProduction();
+					var toTimeout = timeToTurnTimeout();
 
 					// If either timer reaches zero, update the data.
-					if (!refreshing && (toProduction <= 0 || toTick <= 0))
+					if (!refreshing && (toProduction <= 0 || toTick <= 0 || (turnBased && toTimeout <= 0)))
 					{
 						updateData(true);
 					}
 
-					$("#game_timer").html(formatTime(toProduction));
-					$("#game_status").html(data.turn_based ? "" : formatTime(timeToTick(1)));
+					$("#game_timer").html(formatTime(!turnBased ? toProduction : toTimeout));
+					$("#game_status").html(!turnBased ? formatTime(toTick) : formatTime(toProduction, true));
 				},
 				500
 			);
@@ -358,12 +360,18 @@
 
 	/**
 	 * Returns time to the end of the galactic cycle.
-	 * @return {string} Formatted time to production.
+	 * @return {string} Time to production in milliseconds.
 	 */
 	function timeToProduction()
 	{
 		var productionRate = data.production_rate || 0;
 		var productionCounter = data.production_counter || 0;
+
+		// In a turn based game, the timer is locked to the beginning of the current production.
+		if (data.turn_based)
+		{
+			productionCounter = 0;
+		}
 
 		return timeToTick(productionRate - productionCounter);
 	}
@@ -371,23 +379,49 @@
 	/**
 	 * Returns time to a specified tick, relative to the current tick.
 	 * @param  {int} ticks Number of ticks to which time should be calculated.
-	 * @return {string} Time until a tick,
+	 * @return {string} Time until a tick, in milliseconds.
 	 */
 	function timeToTick(ticks)
 	{
 		var tickRate = data.tick_rate || 0;
 		var tickFragment = data.tick_fragment || 0;
 
+		// In a turn based game, the timer is locked to the beginning of the current production.
+		if (data.turn_based)
+		{
+			tickFragment = 0;
+		}
+
 		// Use wacky formula from the game to determine the time
-		return Math.floor((60000 * tickRate * ticks) - (60000 * tickFragment * tickRate) - ((new Date).valueOf() - timeNow.valueOf()) - localTimeCorrection);
+		// Time in ms of the desired number of ticks - time in ms of current tick progress - difference in server and local time - correction.
+		// For turn-based games, leave off the actual time bit.
+		var tickDiff = (60000 * tickRate * ticks) - (60000 * tickFragment * tickRate);
+		if (!data.turn_based)
+		{
+			tickDiff -= ((new Date).valueOf() - timeNow.valueOf()) - localTimeCorrection;
+		}
+
+		return Math.floor(tickDiff);
 	}
 
 	/**
-	 * Outputs time in seconds in [DD:]HH:MM:SS format
-	 * @param  {int} time Time to convert in milliseconds.
+	 * Returns time until the turn times out.
+	 * @return {string} Time until turn timeout in milliseconds.
+	 */
+	function timeToTurnTimeout()
+	{
+		var timeout = data.turn_based_time_out || 0;
+		return (timeout - (new Date()).getTime());
+	}
+
+	/**
+	 * Converts milliseconds to "[DD:]HH:MM[:SS]" or "[Dd ][Hh ][Mm ][Ss]" format
+	 * @param  {int}  time        Time to convert in milliseconds.
+	 * @param  {bool} altFormat   Whether to display in "DD:HH:MM:SS" or "d h m s" format.
+	 * @param  {bool} hideSeconds Whether to hide seconds.
 	 * @return {string} Converted time.
 	 */
-	function formatTime(time)
+	function formatTime(time, altFormat, hideSeconds)
 	{
 		var timeInSeconds = Math.floor(time / 1000);
 		var timeString = '';
@@ -398,20 +432,90 @@
 			timeInSeconds = 0;
 		}
 
-		// Loop through each divisor (days, hours, minutes, seconds) and generate the formatting
-		[86400, 3600, 60, 1].forEach(
-			function(divisor)
+		// If seconds are hidden, we need to round up to the nearest minute if it's not already exact.
+		if (hideSeconds)
+		{
+			if (timeInSeconds % 60 != 0)
 			{
-				var timeTemp = parseInt(timeInSeconds / divisor, 10);
-
-				if (divisor != 86400 || (divisor == 86400 && timeTemp > 0))
-				{
-					timeString += (timeTemp < 10 ? "0" : "") + timeTemp + (divisor != 1 ? ":" : "");
-				}
-
-				timeInSeconds %= divisor;
+				timeInSeconds += (60 - timeInSeconds % 60);
 			}
-		);
+		}
+
+		// Calculate days - do not display them if they do not apply.
+		var timeDays = parseInt(timeInSeconds / 86400, 10);
+		if (timeDays > 0)
+		{
+			if (altFormat)
+			{
+				// Alt format: Add the days and add a "d"
+				timeString += timeDays + "d ";
+			}
+			else
+			{
+				// Normal format: Add the days and a colon
+				timeString += (timeDays < 10 ? "0" : "") + timeDays + ":";
+			}
+		}
+
+		// If using the alternate format and no narrower time is available, return now.
+		timeInSeconds %= 86400;
+		if (timeInSeconds == 0 && altFormat)
+		{
+			return timeString;
+		}
+
+		// Calculate hours
+		var timeHours = parseInt(timeInSeconds / 3600, 10);
+		if (altFormat)
+		{
+			// Alt format: only display hours if more than an hour remains.
+			timeString += ((timeDays <= 0 && timeHours <= 0) ? "" : timeHours + "h ");
+		}
+		else
+		{
+			// Normal format: add the hours and a colon
+			timeString += (timeHours < 10 ? "0" : "") + timeHours + ":";
+		}
+
+		// If using the alternate format and no narrower time is available, return now.
+		timeInSeconds %= 3600;
+		if (timeInSeconds == 0 && altFormat)
+		{
+			return timeString;
+		}
+
+		// Calculate minutes
+		var timeMinutes = parseInt(timeInSeconds / 60, 10);
+		if (altFormat)
+		{
+			// Alt format: only display minutes if more than a minute remains.
+			timeString += ((timeDays <= 0 && timeHours <= 0 && timeMinutes <= 0) ? "" : timeMinutes + "m ");
+		}
+		else
+		{
+			// Normal format: add the minutes, but do not display the colon if seconds are hidden
+			timeString += (timeMinutes < 10 ? "0" : "") + timeMinutes + (hideSeconds ? "" : ":");
+		}
+
+		// If using the alternate format and no narrower time is available, return now.
+		timeInSeconds %= 60;
+		if (timeInSeconds == 0 && altFormat)
+		{
+			return timeString;
+		}
+
+		// Calculate seconds if not hidden.
+		if (!hideSeconds)
+		{
+			if (altFormat)
+			{
+				timeString += timeInSeconds + "s";
+			}
+			else
+			{
+				timeString += (timeInSeconds < 10 ? "0" : "") + timeInSeconds;
+			}
+		}
 
 		return timeString;
 	}

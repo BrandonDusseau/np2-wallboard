@@ -106,7 +106,6 @@ class Np2_Game
 
 			// Recalculate time-based information if the cached state isn't paused. If it is, we
 			// can't reliably calculate anything based on the difference in time.
-
 			if (!$cache['paused'] && $cache['started'])
 			{
 				// Recalculate tick information

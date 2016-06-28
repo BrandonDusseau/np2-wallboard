@@ -164,7 +164,6 @@ class Np2_Game
 		// If not logged in already, attempt to authenticate.
 		if (!$client->logged_in)
 		{
-			echo "Client is not logged in.";
 			if (!$client->authenticate())
 			{
 				ob_end_clean();
@@ -172,7 +171,7 @@ class Np2_Game
 			}
 
 			// Try to save the cookie data to cache
-			file_put_contents($authFile, $client->auth_cookie);
+			@file_put_contents($authFile, $client->auth_cookie);
 		}
 
 		$game = $client->GetGame($gameId);

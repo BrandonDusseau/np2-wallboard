@@ -315,6 +315,9 @@ class Np2_Game
 		// Remove visible fleet information
 		unset($universe['fleets']);
 
+		// Add in the game ID
+		$universe['game_id'] = $gameId;
+
 		// Cache the result
 		self::saveCachedValue($gameId, $universe);
 

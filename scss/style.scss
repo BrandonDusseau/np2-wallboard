@@ -20,6 +20,11 @@ body {
 	font-family: Ubuntu, sans-serif;
 }
 
+a, a:link, a:visited, a:active {
+	color: inherit;
+	text-decoration: inherit;
+}
+
 #error {
 	position: absolute;
 	top: 40%;

@@ -345,7 +345,7 @@
 					var toTimeout = timeToTurnTimeout();
 
 					// If either timer reaches zero, update the data.
-					if (!refreshing && (toProduction <= 0 || toTick <= 0 || (turnBased && toTimeout <= 0)))
+					if (!refreshing && (!turnBased && (toProduction <= 0 || toTick <= 0) || (turnBased && toTimeout <= 0)))
 					{
 						updateData(true);
 					}

@@ -108,7 +108,8 @@ class Np2_Game
 
 			// Recalculate time-based information if the cached state isn't paused. If it is, we
 			// can't reliably calculate anything based on the difference in time.
-			if (!$cache['paused'] && $cache['started'])
+			// In a turn-based game, these values should remain the same as the cache.
+			if (!$cache['paused'] && $cache['started'] && !$cache['turn_based'])
 			{
 				// Recalculate tick information
 				$tick_diff = ($cache['tick'] + $cache['tick_fragment']) + ($minutes / $cache['tick_rate']);
@@ -125,7 +126,7 @@ class Np2_Game
 				$tick = $cache['tick'];
 				$tick_fragment = $cache['tick_fragment'];
 				$productions = $cache['productions'];
-				$production_counter = $cache['production_rate'];
+				$production_counter = $cache['production_counter'];
 			}
 
 			// Inject the new values into the data we're returning

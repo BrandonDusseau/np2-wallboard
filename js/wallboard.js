@@ -367,12 +367,6 @@
 		var productionRate = data.production_rate || 0;
 		var productionCounter = data.production_counter || 0;
 
-		// In a turn based game, the timer is locked to the beginning of the current production.
-		if (data.turn_based)
-		{
-			productionCounter = 0;
-		}
-
 		return timeToTick(productionRate - productionCounter);
 	}
 
@@ -386,7 +380,7 @@
 		var tickRate = data.tick_rate || 0;
 		var tickFragment = data.tick_fragment || 0;
 
-		// In a turn based game, the timer is locked to the beginning of the current production.
+		// In a turn based game, the timer is locked to the beginning of the current tick.
 		if (data.turn_based)
 		{
 			tickFragment = 0;

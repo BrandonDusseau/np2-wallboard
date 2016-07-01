@@ -133,6 +133,18 @@
 		var waiting = !data.started;
 		var turnBased = data.turn_based || false;
 
+		// Define the order in which shapes appear for sets of eight players.
+		var ringClasses = [
+			"ring-circle",
+			"ring-square",
+			"ring-hexagon",
+			"ring-triangle",
+			"ring-cross",
+			"ring-rhombus",
+			"ring-star",
+			"ring-oval"
+		];
+
 		if (stars.length)
 		{
 			var starContainer = $("#star_container");
@@ -172,15 +184,26 @@
 					var starPosY = ((star.position.y - starMinY) / starYSpan) * 100;
 					starElement.css("left", starPosX + "%").css("top", starPosY + "%");
 
+					// Remove existing shape class from the star
+					for (var srCls = 0; srCls < ringClasses.length; ++srCls)
+					{
+						starElement.removeClass(ringClasses[srCls]);
+					}
+
 					// Set star color
 					if (typeof star.player != "undefined" && star.player != -1 &&
 						typeof players[star.player] != "undefined")
 					{
-						starElement.css("border-color", players[star.player].color);
+						// Determine player's ring shape and apply it and the color
+						var ringShape = ringClasses[Math.floor(star.player / 8)];
+						starElement.addClass(ringShape);
+						starElement.css("color", players[star.player].color);
 					}
 					else
 					{
-						starElement.css("border-color", "transparent");
+						// Use an invisible ring
+						starElement.addClass(ringClasses[0]);
+						starElement.css("color", "transparent");
 					}
 				}
 			}
@@ -237,11 +260,23 @@
 						}
 					}
 
-					// Set player's ring color
+					// Set player's ring color and shape
 					var ring = playerElement.find(".player-ring");
 					if (ring.length)
 					{
-						ring.css("border-color", player.color);
+						// Determine player's ring shape
+						var playerRingShape = ringClasses[Math.floor(player.uid / 8)];
+
+						// Remove any existing ring shape from the player
+						for (var prCls = 0; prCls < ringClasses.length; ++prCls)
+						{
+							ring.removeClass(ringClasses[prCls]);
+						}
+
+						// Add the shape and color to the player's ring
+						ring.addClass(playerRingShape);
+						ring.css("color", player.color);
+						ring.css("text-shadow", "0 0 4px " + player.color);
 					}
 
 					// Set player's star stat

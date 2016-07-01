@@ -7,7 +7,6 @@ define("NP2_AUTH_EXPIRE", 86400); // 24 hours
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
 require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";
-require_once __DIR__ . "/color.php";
 
 class Np2_Game
 {
@@ -200,6 +199,19 @@ class Np2_Game
 		// Modify player information to remove private data and add attributes
 		if (!empty($universe['players']))
 		{
+			// Define colors for the players. These eight colors are repeated with
+			// each set of eight players.
+			$playerColors = [
+				"#0000FF",
+				"#009FDF",
+				"#40C000",
+				"#FFC000",
+				"#DF5F00",
+				"#C00000",
+				"#C000C0",
+				"#6000C0",
+			];
+
 			$playerCount = count($universe['players']);
 			$players_rekeyed = [];
 
@@ -221,22 +233,9 @@ class Np2_Game
 					$tech = array_diff_key($tech, array_flip($tech_strip));
 				}
 
-				// Calculate the player's color
-				// For 8 players or less, use the game's original 8-color palette.
-				// Otherwise, use a 64-color palette.
-				if ($playerCount <= 8)
-				{
-					$palette = 8;
-					$colorIndex = $pIndex;
-				}
-				else
-				{
-					$palette = 64;
-					$colorIndex = floor(64 / $playerCount) * $pIndex;
-				}
-
-				// Inject player colors
-				$player['color'] = Color::getColor($colorIndex, $palette);
+				// Add player color and shape
+				$player['color'] = $playerColors[$player['uid'] % 8];
+				$player['shape'] = $player['uid'] % 8;
 
 				$players_rekeyed[$player['uid']] = $player;
 				$rank[] = ["player" => $player['uid'], "stars" => $player['total_stars'], "ships" => $player['total_strength'], "name" => $player['name']];

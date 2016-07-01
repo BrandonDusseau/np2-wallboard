@@ -3,6 +3,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<link rel="stylesheet" type="text/css" href="css/fontello-embedded.css" />
+	<link rel="stylesheet" type="text/css" href="css/ringfont.css" />
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/wallboard.js"></script>
 	<title>NP2 Wallboard</title>

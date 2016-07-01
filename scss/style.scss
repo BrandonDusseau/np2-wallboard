@@ -91,19 +91,18 @@ a, a:link, a:visited, a:active {
 
 				.player-ring {
 					display: inline-block;
-					height: 0.5em;
-					width: 0.5em;
-					border: 0.15em solid #000;
-					border-radius: 50%;
-					margin: 0 0 0 0.25em;
+					font-size: 1.4em;
+					width: 1em;
+					margin: 0 0 0 0.25rem;
 					vertical-align: middle;
 				}
 
 				.player-name {
 					display: inline-block;
 					margin-top: 0.2em;
+					margin-left: -0.2em;
 					padding-bottom: 0.3em;
-					width: calc(100% - 0.3em - 5px - 1em);
+					width: calc(100% - 0.5rem - 1.4em);
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
@@ -256,34 +255,28 @@ a, a:link, a:visited, a:active {
 		#star_container {
 			position: absolute;
 			font-size: 1.75vmin;
-			width:  calc(100% - 1.7em - 0.4em);          /* 100% - (2 * (width - border)) */
-			height: calc(100% - 1.7em - 0.4em);          /* 100% - (2 * (height - border)) */
-			margin: 0.4em;                               /* 4em buffer */
-			margin-right:  calc(0.4em + 0.85em + 0.4em); /* 4em + widthAndHeight + (2 * border) */
-			margin-bottom: calc(0.4em + 0.85em + 0.4em); /* 4em + widthAndHeight + (2 * border) */
+			width:  calc(100% - 3.6em); /* 2 * margin */
+			height: calc(100% - 3.6em);
+			margin: 1.8em; /* Roughly 2 * starWidthOrHeight */
 
 			.star {
 				position: absolute;
-				height: 0.85em;
+				font-size: 0.9em;
+				line-height: 0.5em;
 				min-height: 1px;
-				width: 0.85em;
+				height: 0.5em;
+				width: 0.5em;
 				min-width: 1px;
-				background-color: transparent;
-				border: 0.2em solid transparent;
-				border-radius: 50%;
-			}
-
-			.star::after {
-				content: '';
-				height: 0.4em;
-				width: 0.4em;
 				background-color: #FFF;
 				border-radius: 50%;
-				position: absolute;
-				top:  50%;
-				left:  50%;
-				@include translate(-50%, -50%);
 				@include single-box-shadow(0, 0, 0.1em, 0, #FFF);
+			}
+
+			.star:before {
+				font-size: 1.9em;
+				position: absolute;
+				right: 50%;
+				@include translateX(50%);
 			}
 		}
 

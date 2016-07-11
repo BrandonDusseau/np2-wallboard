@@ -241,18 +241,19 @@
 					var name = playerElement.find(".player-name");
 					if (name.length)
 					{
-						name.html(player.name);
+						// If player has become an AI, add a prefix.
+						name.html((player.ai ? "[AI] " : "") + player.name);
 
-						// If player has conceded, mark them dead.
+						// If player has been destroyed, mark them dead.
+						name.removeClass("ready icon-ok");
 						name.removeClass("dead");
-						if (player.conceded)
+						if (player.conceded && player.total_stars == 0 && player.total_strength == 0)
 						{
 							name.addClass("dead");
 						}
-						else
+						// Otherwise, mark them ready if applicable
+						else if (turnBased)
 						{
-							// If player is ready in a turn-based game, mark it.
-							name.removeClass("ready icon-ok");
 							if (player.ready)
 							{
 								name.addClass("ready icon-ok");

@@ -380,12 +380,6 @@
 					var toProduction = timeToProduction();
 					var toTimeout = timeToTurnTimeout();
 
-					// If either timer reaches zero, update the data.
-					if (!refreshing && (!turnBased && (toProduction <= 0 || toTick <= 0) || (turnBased && toTimeout <= 0)))
-					{
-						updateData(true);
-					}
-
 					$("#game_timer").html(formatTime(!turnBased ? toProduction : toTimeout));
 					$("#game_status").html(!turnBased ? formatTime(toTick) : formatTime(toProduction, true));
 				},

@@ -5,6 +5,7 @@
 	var timerInterval = null;    // Interval timer for updating the clock
 	var refreshInterval = null;  // The interval timer for refreshing game data
 	var refreshing = false;      // Whether data is currently refreshing
+	var noTimerRefresh = false;  // Disables refresh on a game timer hitting 0.
 
 	var reloadTimer = 0;         // Timer used to reload data in case of error
 	var errorInterval = null;    // Interval timer for error reload.
@@ -65,6 +66,9 @@
 		 {
 			 return;
 		 }
+
+		 // Re-enable refreshing when a game timer hits zero, if it was disabled.
+		 noTimerRefresh = false;
 
 		 // Show the loading indicator
 		 $("#pane_stars .star-loader").fadeIn();
@@ -382,7 +386,7 @@
 					var toTimeout = timeToTurnTimeout();
 
 					// If either timer reaches zero, update the data.
-					if (!refreshing && (!turnBased && (toProduction <= 0 || toTick <= 0) || (turnBased && toTimeout <= 0)))
+					if (!noTimerRefresh && (!turnBased && (toProduction <= 0 || toTick <= 0) || (turnBased && toTimeout <= 0)))
 					{
 						updateData(true);
 					}
@@ -571,6 +575,7 @@
 		{
 			// Disable refreshing data
 			clearRefreshTimer();
+			noTimerRefresh = true;
 
 			reloadTimer = 20;
 			var retryCounter = $("#error .reload-time");

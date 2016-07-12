@@ -1,0 +1,65 @@
+@import "compass/reset";
+@import "compass/css3/box-shadow";
+@import 'https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700';
+
+* body, html, body {
+	height: 100%;
+}
+
+body {
+	background-color: #000;
+	color: #FFF;
+	font-family: Ubuntu, sans-serif;
+}
+
+h1 {
+	font-style: italic;
+	font-size: 2.5rem;
+}
+
+.game-list {
+	background-color: #1A1D44;
+	margin: auto;
+	text-align: center;
+	width: 600px;
+	height: 100%;
+	@include single-box-shadow(0, 0, 10px, 0, #1A1D44);
+
+	h1 {
+		padding: 15px 0;
+		margin-bottom: 20px;
+		background-color: #2C3273;
+	}
+
+	.error {
+		color: #FFF;
+		background-color: IndianRed;
+		width: 400px;
+		padding: 7px 10px;
+		border-radius: 5px;
+		margin: auto;
+	}
+
+	a:link, a:visited, a:active {
+		color: #FFF;
+		text-decoration: none;
+	}
+
+	a:hover span {
+		background-color: #FF9000;
+	}
+
+	a:active span {
+		background-color: #00AA00;
+	}
+
+	a {
+		span {
+			display: inline-block;
+			width: 325px;
+			padding: 7px 10px;
+			background-color: #5961bb;
+			border-radius: 5px;
+		}
+	}
+}

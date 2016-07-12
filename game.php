@@ -100,7 +100,7 @@ class Np2_Game
 
 		// Attempt to read data from cache first
 		// If no game ID is specified, get the cache for the list of games instead.
-		if (!$ignoreCache && !empty($gameId))
+		if (!$ignoreCache)
 		{
 			$cache = self::readCachedValue(!empty($gameId) ? $gameId : "all");
 			if (!empty($cache) && !empty($gameId))

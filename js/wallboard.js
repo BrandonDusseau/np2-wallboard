@@ -334,6 +334,7 @@
 		timeNow = new Date(data.now) || 0;
 		localTimeCorrection = timeNow.valueOf() - (new Date).valueOf();
 
+		document.title = "NP2 Display :: " + data.name;
 		$("#game_title").html("<a target='_blank' href='http://triton.ironhelmet.com/game/" + data.game_id + "'>" + data.name + "</a>");
 		$("#game_timer").html(formatTime(!turnBased ? timeToProduction() : timeToTurnTimeout()));
 

@@ -2,7 +2,8 @@
 define("NP2_CACHE_DIR", __DIR__ . "/data");
 define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
 define("NP2_AUTH_FILE", NP2_CACHE_DIR . "/auth_%suffix%.dat");
-define("NP2_CACHE_EXPIRE", 300); // 5 minutes (0 for always use cache, -1 to never use cache)
+define("NP2_CACHE_EXPIRE",  300); // 5 minutes (0 for always use cache, -1 to never use cache)
+define("NP2_LIST_EXPIRE",   900); // 15 minutes; same exceptions as above
 define("NP2_AUTH_EXPIRE", 86400); // 24 hours
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
@@ -12,10 +13,11 @@ class Np2_Game
 {
 	/**
 	 * Fetches a value from the cache, if available.
-	 * @param string $key Cache filename suffix.
-	 * @return bool|array False on failure or array of data on success.
+	 * @param  string $key    Cache filename suffix.
+	 * @param  int    $expire How long the cache should last, in seconds.
+	 * @return bool|array     False on failure or array of data on success.
 	 */
-	private static function readCachedValue($key)
+	private static function readCachedValue($key, $expire = NP2_CACHE_EXPIRE)
 	{
 		// Fail if no key was specified.
 		if (empty($key))
@@ -27,7 +29,7 @@ class Np2_Game
 		$cacheFile = str_replace("%suffix%", $key, NP2_CACHE_FILE);
 
 		// Get cached result if possible
-		if (NP2_CACHE_EXPIRE != -1 && file_exists($cacheFile) && (NP2_CACHE_EXPIRE == 0 || time() - filemtime($cacheFile) <= NP2_CACHE_EXPIRE))
+		if ($expire != -1 && file_exists($cacheFile) && ($expire == 0 || time() - filemtime($cacheFile) <= $expire))
 		{
 			$cacheContent = @file_get_contents($cacheFile);
 		}
@@ -102,7 +104,11 @@ class Np2_Game
 		// If no game ID is specified, get the cache for the list of games instead.
 		if (!$ignoreCache)
 		{
-			$cache = self::readCachedValue(!empty($gameId) ? $gameId : "all");
+			$cache_key = (!empty($gameId) ? $gameId : "all");
+			$cache_expire = (!empty($gameId) ? NP2_CACHE_EXPIRE : NP2_LIST_EXPIRE);
+			$cache = self::readCachedValue($cache_key, $cache_expire);
+
+			// Game info
 			if (!empty($cache) && !empty($gameId))
 			{
 				// Get the current time and use it to recalculate some time-dependent properties
@@ -142,6 +148,7 @@ class Np2_Game
 
 				return json_encode($cache, JSON_NUMERIC_CHECK);
 			}
+			// List of games
 			else if (!empty($cache))
 			{
 				return json_encode($cache, JSON_NUMERIC_CHECK);

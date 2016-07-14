@@ -25,6 +25,7 @@ a, a:link, a:visited, a:active {
 	text-decoration: inherit;
 }
 
+/* Error box */
 #error {
 	position: absolute;
 	top: 40%;
@@ -63,6 +64,7 @@ a, a:link, a:visited, a:active {
 	}
 }
 
+/* Player pane - default layout */
 #pane_left {
 	flex: 1 1 30%;
 	min-width: 500px;
@@ -164,6 +166,7 @@ a, a:link, a:visited, a:active {
 	}
 }
 
+/* Player pane - minimal layout */
 #pane_left.player-minimal {
 	.player {
 		flex-flow: row nowrap;
@@ -205,6 +208,7 @@ a, a:link, a:visited, a:active {
 	}
 }
 
+/* Player pane - very minimal layout */
 #pane_left.player-minimal-extreme {
 	@extend #pane_left.player-minimal;
 
@@ -236,6 +240,7 @@ a, a:link, a:visited, a:active {
 	}
 }
 
+/* Stars and game info */
 #pane_right {
 	display: flex;
 	flex-flow: column;
@@ -243,6 +248,7 @@ a, a:link, a:visited, a:active {
 	min-width: 350px;
 	overflow: hidden;
 
+	/* Star pane */
 	#pane_stars {
 		background: #000 image-url("bg.jpg", false, false) 50% 50% no-repeat;
 		background-size: cover;
@@ -296,6 +302,7 @@ a, a:link, a:visited, a:active {
 		}
 	}
 
+	/* Game info pane */
 	#pane_bottom {
 		background-color: #138;
 		flex: 0 1 25%;

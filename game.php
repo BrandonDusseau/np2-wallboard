@@ -13,9 +13,9 @@ class Np2_Game
 {
 	/**
 	 * Fetches a value from the cache, if available.
-	 * @param  string $key    Cache filename suffix.
-	 * @param  int    $expire How long the cache should last, in seconds.
-	 * @return bool|array     False on failure or array of data on success.
+	 * @param  string     $key    Cache filename suffix.
+	 * @param  int        $expire How long the cache should last, in seconds.
+	 * @return bool|array False on failure or array of data on success.
 	 */
 	private static function readCachedValue($key, $expire = NP2_CACHE_EXPIRE)
 	{
@@ -26,26 +26,26 @@ class Np2_Game
 		}
 
 		// Generate a cache file name based on the key
-		$cacheFile = str_replace("%suffix%", $key, NP2_CACHE_FILE);
+		$cache_file = str_replace("%suffix%", $key, NP2_CACHE_FILE);
 
 		// Get cached result if possible
-		if ($expire != -1 && file_exists($cacheFile) && ($expire == 0 || time() - filemtime($cacheFile) <= $expire))
+		if ($expire != -1 && file_exists($cache_file) && ($expire == 0 || time() - filemtime($cache_file) <= $expire))
 		{
-			$cacheContent = @file_get_contents($cacheFile);
+			$cache_content = @file_get_contents($cache_file);
 		}
 
 		// If cache is empty, fail
-		if (!empty($cacheContent))
+		if (!empty($cache_content))
 		{
 			// Validate the cache contents
-			$cacheContent = @unserialize($cacheContent);
-			if ($cacheContent === false || empty($cacheContent['hash'] || empty($cacheContent['data'] ||
-				$cacheContent['hash'] != md5($cacheContent['data']))))
+			$cache_content = @unserialize($cache_content);
+			if ($cache_content === false || empty($cache_content['hash'] || empty($cache_content['data'] ||
+				$cache_content['hash'] != md5($cache_content['data']))))
 			{
 				return false;
 			}
 
-			return unserialize($cacheContent['data']);
+			return unserialize($cache_content['data']);
 		}
 
 		return false;
@@ -53,9 +53,9 @@ class Np2_Game
 
 	/**
 	 * Saves a value to a cache file
-	 * @param string $key  Filename suffix for the cache file.
-	 * @param array  $data An array of data to store to cache.
-	 * @return bool True if successfully saved, false otherwise.
+	 * @param  string $key  Filename suffix for the cache file.
+	 * @param  array  $data An array of data to store to cache.
+	 * @return bool   True if successfully saved, false otherwise.
 	 */
 	private static function saveCachedValue($key, array $data)
 	{
@@ -72,44 +72,45 @@ class Np2_Game
 		}
 
 		// Generate a cache file name based on the key
-		$cacheFile = str_replace("%suffix%", $key, NP2_CACHE_FILE);
+		$cache_file = str_replace("%suffix%", $key, NP2_CACHE_FILE);
 
-		$cacheData = array();
+		$cache_data = array();
 		$data = serialize($data);
-		$cacheData['hash'] = md5($data);
-		$cacheData['data'] = $data;
+		$cache_data['hash'] = md5($data);
+		$cache_data['data'] = $data;
 
-		$result = @file_put_contents($cacheFile, serialize($cacheData));
+		$result = @file_put_contents($cache_file, serialize($cache_data));
 
 		return ($result !== false);
 	}
 
 	/**
 	 * Gets information about one or more games.
-	 * @param string $gameId      The ID of a game for which to fetch info, or null to fetch
-	 *                            info for all games.
+	 * @param  string $game_id      The ID of a game for which to fetch info, or null to fetch
+	 *                              info for all games.
+	 * @param  bool   $ignore_cache Do not load data from the cache.
 	 * @return string JSON encoded array of game data.
 	 */
-	public static function getGameInfo($gameId = null, $ignoreCache = false)
+	public static function getGameInfo($game_id = null, $ignore_cache = false)
 	{
 		// If a game ID is specified, use that. Otherwise, fetch all games.
 		// NOTE: This validation must be present or a file delete operation below may
 		//       become dangerous!
-		if (!empty($gameId) && !is_numeric($gameId))
+		if (!empty($game_id) && !is_numeric($game_id))
 		{
 			return json_encode(array("error" => "Invalid or no game ID specified."));
 		}
 
 		// Attempt to read data from cache first
 		// If no game ID is specified, get the cache for the list of games instead.
-		if (!$ignoreCache)
+		if (!$ignore_cache)
 		{
-			$cache_key = (!empty($gameId) ? $gameId : "all");
-			$cache_expire = (!empty($gameId) ? NP2_CACHE_EXPIRE : NP2_LIST_EXPIRE);
+			$cache_key = (!empty($game_id) ? $game_id : "all");
+			$cache_expire = (!empty($game_id) ? NP2_CACHE_EXPIRE : NP2_LIST_EXPIRE);
 			$cache = self::readCachedValue($cache_key, $cache_expire);
 
 			// Game info
-			if (!empty($cache) && !empty($gameId))
+			if (!empty($cache) && !empty($game_id))
 			{
 				// Get the current time and use it to recalculate some time-dependent properties
 				$current_time = round(microtime(true) * 1000);
@@ -167,13 +168,13 @@ class Np2_Game
 		$client = new TritonClient($config['username'], $config['password']);
 
 		// Attempt to load auth token from cache and inject it into the client.
-		$authFile = str_replace("%suffix%", $config['username'], NP2_AUTH_FILE);
-		if (file_exists($authFile) && time() - filemtime($authFile) <= NP2_AUTH_EXPIRE)
+		$auth_file = str_replace("%suffix%", $config['username'], NP2_AUTH_FILE);
+		if (file_exists($auth_file) && time() - filemtime($auth_file) <= NP2_AUTH_EXPIRE)
 		{
-			$authToken = @file_get_contents($authFile);
-			if (!empty($authToken))
+			$auth_token = @file_get_contents($auth_file);
+			if (!empty($auth_token))
 			{
-				$client->auth_cookie = $authToken;
+				$client->auth_cookie = $auth_token;
 				$client->logged_in = true;
 			}
 		}
@@ -188,20 +189,20 @@ class Np2_Game
 			}
 
 			// Try to save the cookie data to cache
-			@file_put_contents($authFile, $client->auth_cookie);
+			@file_put_contents($auth_file, $client->auth_cookie);
 		}
 
 		// If a game ID is specified, get the data for the requested game.
 		// Otherwise, get a list of games.
-		if (!empty($gameId))
+		if (!empty($game_id))
 		{
-			$game = $client->GetGame($gameId);
+			$game = $client->GetGame($game_id);
 			if (!$game)
 			{
 				// If we used an auth token and failed on the first request, assume it is bad and log in again on the next attempt.
-				if (!empty($authToken))
+				if (!empty($auth_token))
 				{
-					unlink($authFile);
+					unlink($auth_file);
 				}
 
 				ob_end_clean();
@@ -213,8 +214,8 @@ class Np2_Game
 			{
 				// Remove any cache file associated with this game ID, if it exists.
 				// NOTE: The game ID entered has already been validated as numeric at this point. This operation should be safe.
-				$gameCacheFile = str_replace("%suffix%", $gameId, NP2_CACHE_FILE);
-				unlink($gameCacheFile);
+				$game_cache_file = str_replace("%suffix%", $game_id, NP2_CACHE_FILE);
+				unlink($game_cache_file);
 
 				ob_end_clean();
 				return json_encode(array("error" => "Failed to load universe."));
@@ -227,7 +228,7 @@ class Np2_Game
 			{
 				// Define colors for the players. These eight colors are repeated with
 				// each set of eight players.
-				$playerColors = [
+				$player_colors = [
 					"#0000FF",
 					"#009FDF",
 					"#40C000",
@@ -238,13 +239,12 @@ class Np2_Game
 					"#6000C0",
 				];
 
-				$playerCount = count($universe['players']);
 				$players_rekeyed = [];
 
 				// This array is used to determine ranking
 				$rank = [];
 
-				foreach ($universe['players'] as $pIndex => &$player)
+				foreach ($universe['players'] as &$player)
 				{
 					// Strip private information
 					$player_strip = ['researching', 'researching_next', 'war', 'countdown_to_war', 'cash', 'stars_abandoned'];
@@ -260,14 +260,14 @@ class Np2_Game
 					}
 
 					// Add player color and shape
-					$player['color'] = $playerColors[$player['uid'] % 8];
+					$player['color'] = $player_colors[$player['uid'] % 8];
 					$player['shape'] = $player['uid'] % 8;
 
 					$players_rekeyed[$player['uid']] = $player;
-					$rank[] = ["player" => $player['uid'], "stars" => $player['total_stars'], "ships" => $player['total_strength'], "name" => $player['name']];
+					$rank[] = ['player' => $player['uid'], 'stars' => $player['total_stars'], 'ships' => $player['total_strength'], 'name' => $player['name']];
 				}
 
-				// Rank the players
+				// Rank the players by stars, ships, then name.
 				usort(
 					$rank,
 					function ($a, $b)
@@ -342,10 +342,10 @@ class Np2_Game
 			unset($universe['fleets']);
 
 			// Add in the game ID
-			$universe['game_id'] = $gameId;
+			$universe['game_id'] = $game_id;
 
 			// Cache the result
-			self::saveCachedValue($gameId, $universe);
+			self::saveCachedValue($game_id, $universe);
 
 			// Since there is a bit of delay in getting the current time, replace it with the real current time.
 			$universe['now'] = round(microtime(true) * 1000);
@@ -361,9 +361,9 @@ class Np2_Game
 			if (!$server)
 			{
 				// If we used an auth token and failed on the first request, assume it is bad and log in again on the next attempt.
-				if (!empty($authToken))
+				if (!empty($auth_token))
 				{
-					unlink($authFile);
+					unlink($auth_file);
 				}
 
 				ob_end_clean();
@@ -407,7 +407,7 @@ class Np2_Game
 
 			// Sort the array by name
 			usort(
-				$game_list["games"],
+				$game_list['games'],
 				function ($a, $b)
 				{
 					return strncmp($a['name'], $b['name']);
@@ -423,17 +423,17 @@ class Np2_Game
 
 	/**
 	 * Renames a key in an array
-	 * @param array  $array  The arran on which to operate (passed by reference).
-	 * @param string $oldKey The key to be removed.
-	 * @param string $newKey The key to be added.
+	 * @param  array  $array   The array on which to operate (passed by reference).
+	 * @param  string $old_key The key to be removed.
+	 * @param  string $new_key The key to be added.
 	 * @return void
 	 */
-	private static function arrayKeyRename(array &$array, $oldKey, $newKey)
+	private static function arrayKeyRename(array &$array, $old_key, $new_key)
 	{
-		if (array_key_exists($oldKey, $array))
+		if (array_key_exists($old_key, $array))
 		{
-			$array[$newKey] = $array[$oldKey];
-			unset($array[$oldKey]);
+			$array[$new_key] = $array[$old_key];
+			unset($array[$old_key]);
 		}
 	}
 }

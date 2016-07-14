@@ -1,6 +1,7 @@
 # Neptune's Pride 2 Wallboard #
----
-A ten-foot style display for tracking stats in Neptune's Pride 2: Triton.
+## Version 1.0.0 ##
+A ten-foot style display for tracking stats in Neptune's Pride 2: Triton. A live
+demo is available [on my website](http://www.brandonjd.net/np2/).
 
 This project is licensed under the MIT License - see the LICENSE file for
 details.

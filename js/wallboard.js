@@ -1,3 +1,10 @@
+/*
+ * Neptune's Pride 2 Wallboard
+ * Copyright (c) 2016 Brandon Dusseau
+ * Licensed with the MIT license; see LICENSE file for details
+ *
+ * https://github.com/BrandonDusseau/np2-wallboard
+ */
 (function ()
 {
 	var data = {};               // Data from the API

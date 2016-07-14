@@ -16,3 +16,6 @@ vendor
 data/*
 !data/.htaccess
 config.ini
+
+# Don't put releases in the repo!
+releases

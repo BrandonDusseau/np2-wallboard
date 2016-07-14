@@ -1,4 +1,11 @@
 <?php
+/*
+ * Neptune's Pride 2 Wallboard
+ * Copyright (c) 2016 Brandon Dusseau
+ * Licensed with the MIT license; see LICENSE file for details
+ *
+ * https://github.com/BrandonDusseau/np2-wallboard
+ */
 define("NP2_CACHE_DIR", __DIR__ . "/data");
 define("NP2_CACHE_FILE", NP2_CACHE_DIR . "/game_%suffix%.dat");
 define("NP2_AUTH_FILE", NP2_CACHE_DIR . "/auth_%suffix%.dat");

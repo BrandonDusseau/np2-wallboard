@@ -323,11 +323,11 @@
 
 				// Determine the size of the player elements based on how many players are displayed.
 				playerContainer.removeClass("player-minimal player-minimal-extreme");
-				if ($(".player").length > 24)
+				if ($(".player:not(#player_template)").length > 24)
 				{
 					playerContainer.addClass("player-minimal-extreme");
 				}
-				else if ($(".player").length > 8)
+				else if ($(".player:not(#player_template)").length > 8)
 				{
 					playerContainer.addClass("player-minimal");
 				}

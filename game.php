@@ -410,7 +410,7 @@ class Np2_Game
 				$game_list['games'],
 				function ($a, $b)
 				{
-					return strncmp($a['name'], $b['name']);
+					return strnatcmp($a['name'], $b['name']);
 				}
 			);
 

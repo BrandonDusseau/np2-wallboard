@@ -175,7 +175,8 @@ class Np2_Game
 		$client = new TritonClient($config['username'], $config['password']);
 
 		// Attempt to load auth token from cache and inject it into the client.
-		$auth_file = str_replace("%suffix%", $config['username'], NP2_AUTH_FILE);
+		$username_sanitized = preg_replace("/[^a-zA-Z0-9]/", "_", $config['username']);
+		$auth_file = str_replace("%suffix%", $username_sanitized, NP2_AUTH_FILE);
 		if (file_exists($auth_file) && time() - filemtime($auth_file) <= NP2_AUTH_EXPIRE)
 		{
 			$auth_token = @file_get_contents($auth_file);

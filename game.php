@@ -275,7 +275,7 @@ class Np2_Game
 					$rank[] = ['player' => $player['uid'], 'stars' => $player['total_stars'], 'ships' => $player['total_strength']];
 				}
 
-				// Rank the players by stars, ships, then name.
+				// Rank the players by stars, ships, then UID.
 				usort(
 					$rank,
 					function ($a, $b)
@@ -290,7 +290,7 @@ class Np2_Game
 						{
 							return -1;
 						}
-						// Otherwise, everything is equal and we should just sort by name
+						// Otherwise, everything is equal and we should just sort by UID
 						else
 						{
 							return ($a['player'] - $b['player']);

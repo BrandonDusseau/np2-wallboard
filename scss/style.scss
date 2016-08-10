@@ -174,7 +174,7 @@ a, a:link, a:visited, a:active {
 
 		.player-head {
 			flex-basis: 60%;
-			font-size: 4vmin;
+			font-size: 3vmin;
 		}
 
 		.player-stats {
@@ -235,6 +235,41 @@ a, a:link, a:visited, a:active {
 						font-size: inherit;
 					}
 				}
+			}
+		}
+	}
+}
+
+/* Player pane - very minimal layout */
+#pane_left.player-minimal-insane {
+	@extend #pane_left.player-minimal-extreme;
+
+	.player {
+
+		.player-head {
+			flex-basis: 30%;
+			font-size: 1vmin;
+		}
+
+		.player-stats {
+			.stat {
+				.stat-inner {
+					flex-flow: row nowrap;
+					font-size: 1vmin;
+
+					.stat-icon {
+						flex: 0 0 1.55em;
+						font-size: inherit;
+					}
+
+					span {
+						font-size: inherit;
+					}
+				}
+			}
+
+			.stat.economy, .stat.industry, .stat.science {
+				display: inherit;
 			}
 		}
 	}

@@ -272,7 +272,7 @@ class Np2_Game
 					$player['shape'] = $player['uid'] % 8;
 
 					$players_rekeyed[$player['uid']] = $player;
-					$rank[] = ['player' => $player['uid'], 'stars' => $player['total_stars'], 'ships' => $player['total_strength'], 'name' => $player['name']];
+					$rank[] = ['player' => $player['uid'], 'stars' => $player['total_stars'], 'ships' => $player['total_strength']];
 				}
 
 				// Rank the players by stars, ships, then name.
@@ -293,7 +293,7 @@ class Np2_Game
 						// Otherwise, everything is equal and we should just sort by name
 						else
 						{
-							return strnatcmp($a['name'], $b['name']);
+							return ($a['player'] - $b['player']);
 						}
 					}
 				);

@@ -263,7 +263,7 @@
 							name.addClass("dead");
 						}
 						// Otherwise, mark them ready if applicable
-						else if (turnBased)
+						else if (turnBased && !ended)
 						{
 							if (player.ready)
 							{

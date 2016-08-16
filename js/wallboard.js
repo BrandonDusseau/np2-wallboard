@@ -355,30 +355,37 @@
 
 		// Update game status indicator and timer
 		$("#game_status").removeClass("pause");
+		// Mid-game pause
 		if (paused && !waiting)
 		{
-			$("#game_status").addClass("pause");
-			$("#game_status").html("PAUSED");
-			$("#game_timer").html(formatTime(timeToProduction()));
+			$("#game_status").addClass("pause").html("PAUSED");
+
+			// We cannot calculate the turn due time while paused, so don't display it.
+			if (turnBased)
+			{
+				$("#game_timer").html("&mdash;");
+			}
 		}
+		// Game over
 		else if (ended)
 		{
-			$("#game_status").addClass("pause");
-			$("#game_status").html("GAME OVER");
 			var winnerPlayer = $(".player[data-rank=1]");
 			var winnerId = (winnerPlayer.length ? winnerPlayer.data("player-id") : -1);
+			$("#game_status").addClass("pause").html("GAME OVER");
 			$("#game_timer").html("<div class='winner'><div class='win-heading'>Winner</div>" +
 				(winnerId != -1 ? data.players[winnerId].name : "[Player not found]") + "</div>");
 
 			// If the game is over, don't bother reloading data.
 			clearRefreshTimer();
 		}
+		// Waiting for game start
 		else if (waiting)
 		{
 			$("#game_status").addClass("pause");
 			$("#game_status").html("WAITING...");
 			$("#game_timer").html("");
 		}
+		// Game running
 		else
 		{
 			$("#game_status").html(turnBased ? formatTime(timeToProduction(), true, true) : formatTime(timeToTick(1)));

@@ -164,112 +164,112 @@ a, a:link, a:visited, a:active {
 	.player#player_template {
 		display: none;
 	}
-}
 
-/* Player pane - minimal layout */
-#pane_left.player-minimal {
-	.player {
-		flex-flow: row nowrap;
-		margin: 1px 0;
+	/* Player pane - minimal layout */
+	.player-minimal {
+		.player {
+			flex-flow: row nowrap;
+			margin: 1px 0;
 
-		.player-head {
-			flex-basis: 60%;
-			font-size: 3vmin;
-		}
+			.player-head {
+				flex-basis: 60%;
+				font-size: 3vmin;
+			}
 
-		.player-stats {
-			flex-basis: 40%;
-			font-size: 3.0vmin;
+			.player-stats {
+				flex-basis: 40%;
+				font-size: 3.0vmin;
 
-			.stat {
-				margin: 0;
-				margin-left: 1px;
-				text-align: center;
+				.stat {
+					margin: 0;
+					margin-left: 1px;
+					text-align: center;
 
-				.stat-inner {
-					flex-flow: column wrap;
+					.stat-inner {
+						flex-flow: column wrap;
 
-					.stat-icon {
-						margin-left: 0;
-						font-size: 2.5vmin;
-						flex: 0 1 auto;
-					}
+						.stat-icon {
+							margin-left: 0;
+							font-size: 2.5vmin;
+							flex: 0 1 auto;
+						}
 
-					span {
-						flex: 1 1 auto;
+						span {
+							flex: 1 1 auto;
+						}
 					}
 				}
-			}
 
-			.stat.economy, .stat.industry, .stat.science {
-				display: none;
-			}
-		}
-	}
-}
-
-/* Player pane - very minimal layout */
-#pane_left.player-minimal-extreme {
-	@extend #pane_left.player-minimal;
-
-	.player {
-		margin: 0;
-		margin-bottom: 1px;
-
-		.player-head {
-			font-size: 2.75vmin;
-		}
-
-		.player-stats {
-			.stat {
-				.stat-inner {
-					flex-flow: row nowrap;
-					font-size: 2vmin;
-
-					.stat-icon {
-						flex: 0 0 1.55em;
-						font-size: inherit;
-					}
-
-					span {
-						font-size: inherit;
-					}
+				.stat.economy, .stat.industry, .stat.science {
+					display: none;
 				}
 			}
 		}
 	}
-}
 
-/* Player pane - very minimal layout */
-#pane_left.player-minimal-insane {
-	@extend #pane_left.player-minimal-extreme;
+	/* Player pane - very minimal layout */
+	.player-minimal-extreme {
+		@extend .player-minimal;
 
-	.player {
+		.player {
+			margin: 0;
+			margin-bottom: 1px;
 
-		.player-head {
-			flex-basis: 30%;
-			font-size: 1vmin;
-		}
+			.player-head {
+				font-size: 2.75vmin;
+			}
 
-		.player-stats {
-			.stat {
-				.stat-inner {
-					flex-flow: row nowrap;
-					font-size: 1vmin;
+			.player-stats {
+				.stat {
+					.stat-inner {
+						flex-flow: row nowrap;
+						font-size: 2vmin;
 
-					.stat-icon {
-						flex: 0 0 1.55em;
-						font-size: inherit;
-					}
+						.stat-icon {
+							flex: 0 0 1.55em;
+							font-size: inherit;
+						}
 
-					span {
-						font-size: inherit;
+						span {
+							font-size: inherit;
+						}
 					}
 				}
 			}
+		}
+	}
 
-			.stat.economy, .stat.industry, .stat.science {
-				display: inherit;
+	/* Player pane - very minimal layout */
+	.player-minimal-insane {
+		@extend .player-minimal-extreme;
+
+		.player {
+
+			.player-head {
+				flex-basis: 30%;
+				font-size: 1vmin;
+			}
+
+			.player-stats {
+				.stat {
+					.stat-inner {
+						flex-flow: row nowrap;
+						font-size: 1vmin;
+
+						.stat-icon {
+							flex: 0 0 1.55em;
+							font-size: inherit;
+						}
+
+						span {
+							font-size: inherit;
+						}
+					}
+				}
+
+				.stat.economy, .stat.industry, .stat.science {
+					display: inherit;
+				}
 			}
 		}
 	}

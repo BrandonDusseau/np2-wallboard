@@ -1,22 +1,20 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "cfe0ccc5f146b309281cc799d3132712",
-    "content-hash": "942595ccda2ead909f4286332a2544b8",
+    "content-hash": "67630d734092e8f9679db074666fb156",
     "packages": [
         {
-            "name": "BrandonDusseau/phpTriton",
-            "version": "dev-master",
+            "name": "brandondusseau/phptriton",
+            "version": "v0.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/BrandonDusseau/phpTriton.git",
-                "reference": "master"
+                "url": "https://github.com/BrandonDusseau/phptriton.git",
+                "reference": "v0.0.2"
             },
-            "type": "library",
-            "time": "2016-06-08 00:54:14"
+            "type": "library"
         }
     ],
     "packages-dev": [],

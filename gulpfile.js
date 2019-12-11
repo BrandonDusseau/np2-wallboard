@@ -1,14 +1,13 @@
 const { parallel, src, dest, series } = require('gulp');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
-const sass = require('gulp-sass');
+const compass = require('gulp-compass');
 const composer = require('gulp-composer');
 const gulpif = require('gulp-if');
 const del = require('del');
 
 function clean() {
   return del(['build', 'src/vendor']);
-
 }
 
 function minifyJs() {
@@ -24,24 +23,30 @@ function isScssFile(file) {
 }
 
 function css() {
-  return src(['src/css/*.scss', 'src/css/*.css'])
+  return src(['src/scss/*.scss', 'src/scss/*.css'])
     .pipe(
-      gulpif(isScssFile, sass({outputStyle: 'compressed'}).on('error', sass.logError))
+      gulpif(
+        isScssFile,
+        compass({ config_file: './config.rb', sass: 'src/scss', css: 'build/css' })
+      )
     )
     .pipe(dest('build/css/'));
 }
 
 function phpComposer() {
   composer({ 'working-dir': 'src/' });
-  return src('src/vendor')
+  return src('src/vendor/**/*', { base: 'src' })
     .pipe(dest('build/'))
 }
 
 function static() {
-  return src(['src/data', 'src/font', 'src/.htaccess', 'src/*.php', 'src/*.ini'])
+  return src(
+      ['src/data/**/*', 'src/font/**/*', 'src/img/**/*', 'src/.htaccess', 'src/*.php', 'src/*.ini'],
+      { base: 'src', dot: true }
+    )
     .pipe(dest('build/'));
 }
 
-exports.build = parallel(minifyJs, css, phpComposer, static);;
+exports.build = parallel(minifyJs, css, phpComposer, static);
 exports.clean = clean;
 exports.default = series(clean, parallel(minifyJs, css, phpComposer, static));

@@ -14,7 +14,7 @@ define("NP2_LIST_EXPIRE",   900); // 15 minutes; same exceptions as above
 define("NP2_AUTH_EXPIRE", 86400); // 24 hours
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
-require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";
+require_once __DIR__ . "/vendor/brandondusseau/phptriton/client.php";
 
 class Np2_Game
 {

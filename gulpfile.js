@@ -7,7 +7,7 @@ const gulpif = require('gulp-if');
 const del = require('del');
 
 function clean() {
-  return del(['build', 'src/vendor']);
+  return del(['build/*', 'src/vendor']);
 }
 
 function minifyJs() {
@@ -34,7 +34,7 @@ function css() {
 }
 
 function phpComposer() {
-  composer({ 'working-dir': 'src/' });
+  composer({ 'working-dir': 'src/', async: false });
   return src('src/vendor/**/*', { base: 'src' })
     .pipe(dest('build/'))
 }

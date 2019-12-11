@@ -5,4 +5,4 @@ services:
     ports:
     - "4000:80"
     volumes:
-    - build:/var/www/html/
+    - ./build:/var/www/html/

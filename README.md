@@ -1,5 +1,4 @@
 # Neptune's Pride 2 Wallboard #
-## Version 1.0.1 ##
 A ten-foot style display for tracking stats in Neptune's Pride 2: Triton. A live
 demo is available [on my website](http://www.brandonjd.net/np2/).
 
@@ -35,7 +34,7 @@ Left: a standard game, right: a dark, turn-based game.
   * **NOTE:** `.htaccess` files are included for security. If not using Apache, be sure to deny permission to `data/` and `config.ini` in your web server configuration.
 
 ### Usage ###
-1. Download the [latest compiled zip](https://github.com/BrandonDusseau/np2-wallboard/releases/latest/) (the one named `np2-wallboard.zip`).
+1. Download the [latest compiled zip](https://github.com/BrandonDusseau/np2-wallboard/releases/latest/) (the one named `np2-wallboard-vX.X.X.zip`).
 2. Upload the contents of the zip file to your desired location on your web server.
 3. Enable write permissions on the `data` directory to whichever user your web server (or PHP server) is running as.
 4. Rename `config.sample.ini` to `config.ini` and put your NP2 credentials into it.

@@ -7,7 +7,7 @@ const gulpif = require('gulp-if');
 const del = require('del');
 
 function clean() {
-  return del(['build/*', 'src/vendor']);
+  return del('build/*');
 }
 
 function minifyJs() {

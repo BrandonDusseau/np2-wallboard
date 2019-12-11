@@ -333,8 +333,8 @@ class Np2_Game
 
 					// Group the coordinates
 					$star['position'] = [
-						'x' => (isset($star['x']) ? $star['x'] : 0),
-						'y' => (isset($star['y']) ? $star['y'] : 0)
+						'x' => (isset($star['x']) ? (float)$star['x'] : 0),
+						'y' => (isset($star['y']) ? (float)$star['y'] : 0)
 					];
 					unset($star['x']);
 					unset($star['y']);

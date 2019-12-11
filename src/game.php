@@ -154,12 +154,12 @@ class Np2_Game
 				$cache['productions'] = $productions;
 				$cache['production_counter'] = $production_counter;
 
-				return json_encode($cache, JSON_NUMERIC_CHECK);
+				return json_encode($cache);
 			}
 			// List of games
 			else if (!empty($cache))
 			{
-				return json_encode($cache, JSON_NUMERIC_CHECK);
+				return json_encode($cache);
 			}
 		}
 
@@ -368,7 +368,8 @@ class Np2_Game
 			// Handle failure to get server
 			if (!$server)
 			{
-				// If we used an auth token and failed on the first request, assume it is bad and log in again on the next attempt.
+				// If we used an auth token and failed on the first request, assume it is bad and log in again on the
+				// next attempt.
 				if (!empty($auth_token))
 				{
 					unlink($auth_file);
@@ -425,7 +426,7 @@ class Np2_Game
 			// Cache the result
 			self::saveCachedValue("all", $game_list);
 
-			return json_encode($game_list, JSON_NUMERIC_CHECK);
+			return json_encode($game_list);
 		}
 	}
 

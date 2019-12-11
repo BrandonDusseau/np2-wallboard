@@ -47,6 +47,11 @@ function static() {
     .pipe(dest('build/'));
 }
 
+function clearCache() {
+  return del("build/data/*.dat");
+}
+
 exports.build = parallel(minifyJs, css, phpComposer, static);
 exports.clean = clean;
 exports.default = series(clean, parallel(minifyJs, css, phpComposer, static));
+exports.clearcache = clearCache;

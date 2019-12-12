@@ -1,0 +1,29 @@
+language: node_js
+node_js:
+  - 13
+
+install:
+  - npm install -g gulp-cli
+  - npm install
+
+script: gulp
+
+before_deploy:
+  - export CLEAN_VERSION=${TRAVIS_TAG//v/}
+  - sed -ibak "s/#APPVERSION#/$CLEAN_VERSION/" build/*.php
+  - export ZIP_FILENAME="np2-wallboard-${TRAVIS_TAG}"
+  - mkdir $ZIP_FILENAME
+  - cp README.md LICENSE $ZIP_FILENAME
+  - mv build ${ZIP_FILENAME}/public
+  - zip -r $ZIP_FILENAME ${ZIP_FILENAME}.zip
+
+deploy:
+  provider: releases
+  api_key:
+    secure: pEU99xrijpvY4WPdeuZGkOZW1MKsa1un00lKma5I/9qgoBC0elnqjbjXPNPClwrrXunIcybTZzkxrG6KIM3NFGgYihIkMqzlCRrKrlGRH7QKfvOUYTS19WWU926/1flOAh+IVgy1ezQkr/4uFpHWJL3M7OzOlE+lcEdVItBoR9JTgsaqyPNR/BPEZ//P7QDBJYmp93MuEO/93HGs8Byo8QiyKWBDKsDkfXte2AaV7UG4tQmOFv9bRegp9U/RrZe+5VickKk2Kt9kFEH775ZTtvvcWjYz69kMXNjc7re01sQZGQh57G5Vsde7x/ttqUx+PiRjD5DODfYP/OnApwgUYnyKYGUSEUQ+NYwVgtXR+Wl2+JkTP+blHOx9DIVyrH5wAMZnXEZ8pQN8stiXShmOrCiida0bIoZqykoTrQCylLzctXjaCedDUq+vTJUZq+Dn3o5xurE7Nougz7fBGrVtFUfSaOoq85PLWMWGjGfT0s4z0koddONPRvM4K/w3g6gf9yu7KSlXizIqOQLZJuSu7bCmdJgi8+XSzA8yOHswCEWZ0X+LeB7kBk5HK7bAipyXOHWwgl8kl16lCUogSgdDMr5e4X9+v/fZTljxWV2a6IDp57qxfnm3IPJAc17AJA3eSu+GA78vjOdecL0lz54qttJhwEYRgiyBnGrWV46rA/4=
+  file: "$ZIP_FILENAME"
+  skip_cleanup: true
+  draft: true
+  overwrite: true
+  on:
+    tags: true

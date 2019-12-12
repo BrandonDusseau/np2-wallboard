@@ -7,10 +7,13 @@
     "no-eval": ["error"],
     "no-multi-spaces": [
       "warn",
-      "exceptions": {
-        "Property": true,
-        "VariableDeclarator": true,
-        "ImportDeclaration": true
+      {
+        "ignoreEOLComments": true,
+        "exceptions": {
+          "Property": true,
+          "VariableDeclarator": true,
+          "ImportDeclaration": true
+        }
       }
     ],
     "no-shadow": ["error"],

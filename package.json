@@ -12,6 +12,7 @@
   "homepage": "https://github.com/BrandonDusseau/np2-wallboard#readme",
   "devDependencies": {
     "del": "^5.1.0",
+    "eslint": "^6.7.2",
     "gulp": "^4.0.2",
     "gulp-compass": "^2.1.0",
     "gulp-composer": "^0.4.5",

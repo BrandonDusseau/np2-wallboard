@@ -1,13 +1,19 @@
 language: node_js
-node_js:
-  - 13
+node_js: 13
 
 install:
   - npm install -g gulp-cli
   - npm install
   - gem install compass
 
-script: gulp
+jobs:
+  include:
+    - language: node_js
+      node_js: 13
+      script: node_modules/.bin/eslint src/js/*.js
+    - language: node_js
+      node_js: 13
+      script: gulp
 
 before_deploy:
   - export CLEAN_VERSION=${TRAVIS_TAG//v/}

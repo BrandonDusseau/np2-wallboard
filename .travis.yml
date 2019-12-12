@@ -8,11 +8,9 @@ install:
 
 jobs:
   include:
-    - language: node_js
-      node_js: 13
+    - name: "Run ESLint"
       script: node_modules/.bin/eslint src/js/*.js
-    - language: node_js
-      node_js: 13
+    - name: "Run Gulp"
       script: gulp
 
 before_deploy:

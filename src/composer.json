@@ -1,0 +1,23 @@
+{
+	"repositories": {
+		"phpTriton":
+		{
+			"type": "package",
+			"package":
+			{
+				"name": "brandondusseau/phptriton",
+				"version": "v0.0.2",
+				"source":
+				{
+					"url": "https://github.com/BrandonDusseau/phptriton.git",
+					"type": "git",
+					"reference": "v0.0.2"
+				}
+			}
+		}
+	},
+	"require": {
+		"brandondusseau/phptriton": "v0.0.2"
+	},
+	"minimum-stability": "dev"
+}

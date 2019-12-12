@@ -1,0 +1,28 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "67630d734092e8f9679db074666fb156",
+    "packages": [
+        {
+            "name": "brandondusseau/phptriton",
+            "version": "v0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BrandonDusseau/phptriton.git",
+                "reference": "v0.0.2"
+            },
+            "type": "library"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

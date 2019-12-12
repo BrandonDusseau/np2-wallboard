@@ -24,6 +24,23 @@ h1 {
 	width: 600px;
 	height: 100%;
 	@include single-box-shadow(0, 0, 10px, 0, #1A1D44);
+	display: flex;
+	flex-flow: column nowrap;
+
+	.games {
+		flex: 1 1 auto;
+	}
+
+	.version {
+		font-size: 0.7em;
+		flex: 0 0 auto;
+		padding: 1em 0 1em 0;
+
+		a:link, a:visited, a:active {
+			text-decoration: underline;
+			margin: 0;
+		}
+	}
 
 	h1 {
 		padding: 15px 0;

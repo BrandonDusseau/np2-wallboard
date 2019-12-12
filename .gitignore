@@ -5,17 +5,13 @@ Thumbs.db
 
 # Gross compiled stuff
 .sass-cache
-css/*
-!css/fontello-embedded.css
-!css/ringfont.css
-js/*.min.*
-!js/jquery.min.js
+build
 vendor
+node_modules
 
 # Naughty things we don't want the world to see
 data/*
 !data/.htaccess
 config.ini
 
-# Don't put releases in the repo!
 releases

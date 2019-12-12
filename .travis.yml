@@ -1,0 +1,37 @@
+language: node_js
+node_js: 13
+os: linux
+
+install:
+  - npm install -g gulp-cli
+  - npm install
+  - gem install compass
+
+jobs:
+  include:
+    - name: "Run ESLint"
+      script: node_modules/.bin/eslint src/js/*.js
+    - name: "Run Gulp"
+      script: gulp
+
+before_deploy:
+  - export CLEAN_VERSION=${TRAVIS_TAG//v/}
+  - sed -i.bak "s/#APPVERSION#/$CLEAN_VERSION/" build/*.php
+  - rm build/*.bak
+  - export ZIP_FILENAME="np2-wallboard-${TRAVIS_TAG}"
+  - mkdir $ZIP_FILENAME
+  - cp README.md LICENSE $ZIP_FILENAME
+  - mv build ${ZIP_FILENAME}/public
+  - zip -qr ${ZIP_FILENAME}.zip $ZIP_FILENAME
+
+deploy:
+  provider: releases
+  token:
+    secure: "pP/AiaWVX47dNnu76qrnIKERVk7Jr9kBWpqqNCn70lVvirNBqarlkUQW7EARRjbfR8ofQVbpMceGax6phXk8QPCii4oaX3LgevnnZXS1U5+hJmmiBVW8oVIgRR86QlsMoHfW/xdIq9/TPp6eayLxs/VQMaa7+hONqRChqRvfLDA+zNcg6eSlnI6u6cg0AH6j5E3VkJGaed0B1sY+E/iERySCfXWqd8BRutO4HqlAjwTR6B56QXf4tBox3JK6YMAZz1ixwBSXpl2gotqM4/PTGw7XREWp6ba/ApA0v/4ludw+xNYA9lgBOnQJ/IElLKQ1iw+FnInxUMJMhHp2d+/IKzcKvi6QOF4NpAzbNgj7nfFuLjboZoaPiJ494e9RGesMKowVKuQZQzv1yVng3j81XnUj/DCy66Z+5/sTQRBZALCtBI4d8kxWDAo958wHzwMSvE+ilW5cnPRipGYbK9Ms0+LsunH647gwGcGydGvrxE2C2WeqXqYgZZiBSAHuHqiBGI5Q/jj88TCr58amJAsAWUWZWXhL34yW5VnauW3OrPWQpVdGVbCYLW+UupT8wMd8amJXwNok7PUqPbMRSJvG2d2bna7rS5f/hfoBjkN6xzfzkGXa4tMNPGTMwrmirI2XZ8Jq5cYwJT0V74iG5K17/I3N/4Uku4iHjmdy50DKHck="
+  file: "${ZIP_FILENAME}.zip"
+  name: "$TRAVIS_TAG"
+  skip_cleanup: true
+  draft: true
+  overwrite: true
+  on:
+    tags: true

@@ -1,7 +1,7 @@
 <?php
 /*
  * Neptune's Pride 2 Wallboard
- * Copyright (c) 2016 Brandon Dusseau
+ * Copyright (c) 2019 Brandon Dusseau
  * Licensed with the MIT license; see LICENSE file for details
  *
  * https://github.com/BrandonDusseau/np2-wallboard
@@ -14,7 +14,7 @@ define("NP2_LIST_EXPIRE",   900); // 15 minutes; same exceptions as above
 define("NP2_AUTH_EXPIRE", 86400); // 24 hours
 define("API_CONFIG_FILE", __DIR__ . "/config.ini");
 
-require_once __DIR__ . "/vendor/BrandonDusseau/phpTriton/client.php";
+require_once __DIR__ . "/vendor/brandondusseau/phptriton/client.php";
 
 class Np2_Game
 {
@@ -154,12 +154,12 @@ class Np2_Game
 				$cache['productions'] = $productions;
 				$cache['production_counter'] = $production_counter;
 
-				return json_encode($cache, JSON_NUMERIC_CHECK);
+				return json_encode($cache);
 			}
 			// List of games
 			else if (!empty($cache))
 			{
-				return json_encode($cache, JSON_NUMERIC_CHECK);
+				return json_encode($cache);
 			}
 		}
 
@@ -333,8 +333,8 @@ class Np2_Game
 
 					// Group the coordinates
 					$star['position'] = [
-						'x' => (isset($star['x']) ? $star['x'] : 0),
-						'y' => (isset($star['y']) ? $star['y'] : 0)
+						'x' => (isset($star['x']) ? (float)$star['x'] : 0),
+						'y' => (isset($star['y']) ? (float)$star['y'] : 0)
 					];
 					unset($star['x']);
 					unset($star['y']);
@@ -368,7 +368,8 @@ class Np2_Game
 			// Handle failure to get server
 			if (!$server)
 			{
-				// If we used an auth token and failed on the first request, assume it is bad and log in again on the next attempt.
+				// If we used an auth token and failed on the first request, assume it is bad and log in again on the
+				// next attempt.
 				if (!empty($auth_token))
 				{
 					unlink($auth_file);
@@ -425,7 +426,7 @@ class Np2_Game
 			// Cache the result
 			self::saveCachedValue("all", $game_list);
 
-			return json_encode($game_list, JSON_NUMERIC_CHECK);
+			return json_encode($game_list);
 		}
 	}
 

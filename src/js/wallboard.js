@@ -166,11 +166,11 @@
 				var starMaxY = 0;
 				var starMinX = 0;
 				var starMinY = 0;
-				for (var st = 0; st < stars.length; ++st)
+				for (var stIdx = 0; stIdx < stars.length; ++stIdx)
 				{
-					var star = stars[st];
-					var starX = star.position.x;
-					var starY = star.position.y;
+					var starExtreme = stars[stIdx];
+					var starX = starExtreme.position.x;
+					var starY = starExtreme.position.y;
 					starMaxX = (starX > starMaxX ? starX : starMaxX);
 					starMaxY = (starY > starMaxY ? starY : starMaxY);
 					starMinX = (starX < starMinX ? starX : starMinX);
@@ -180,9 +180,9 @@
 				var starXSpan = starMaxX - starMinX;
 				var starYSpan = starMaxY - starMinY;
 
-				for (var st = 0; st < stars.length; ++st)
+				for (var stIdx2 = 0; stIdx2 < stars.length; ++stIdx2)
 				{
-					var star = stars[st];
+					var star = stars[stIdx2];
 					var starId = star.uid;
 					var starElement = $(".star[data-star-id='" + starId + "']");
 					if (!starElement.length)
@@ -645,14 +645,7 @@
 		}
 
 		// Reset dialog state
-		$("#error").fadeOut(
-			300,
-			function ()
-			{
-				$("#error_text").html("");
-				$("#error .reload-time").html("");
-			}
-		);
+		$("#error").fadeOut(300);
 	}
 
 	/**

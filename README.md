@@ -58,7 +58,9 @@ These steps are only necessary if building the application from source. If you a
 
 1. Install nodejs (tested on version 13.x)
 2. Install gulp-cli: `npm install --global gulp-cli`
-3. Navigate your terminal to this directory and run `gulp`
+3. Install Ruby
+4. Install the Compass gem: `gem install compass`
+5. Navigate your terminal to this directory and run `gulp`
 
 ### Attributions ###
 This project utilizes icon fonts found on [Fontello](http://fontello.com).

@@ -5,6 +5,8 @@ node_js:
 install:
   - npm install -g gulp-cli
   - npm install
+  - apt install ruby
+  - gem install compass
 
 script: gulp
 

@@ -12,8 +12,6 @@ script: gulp
 before_deploy:
   - export CLEAN_VERSION=${TRAVIS_TAG//v/}
   - sed -ibak "s/#APPVERSION#/$CLEAN_VERSION/" build/*.php
-  - export ZIP_FILENAME="np2-wallboard-${TRAVIS_TAG}"
-  - echo "Zip file: ${ZIP_FILENAME}"
   - mkdir $ZIP_FILENAME
   - cp README.md LICENSE $ZIP_FILENAME
   - mv build ${ZIP_FILENAME}/public

@@ -31,11 +31,27 @@ Left: a standard game, right: a dark, turn-based game.
 	Neptune's Pride 2, and is somewhat mitigated by login caching.
 
 ### Requirements ###
-* A web server running PHP 5.4 or higher.
-  * **NOTE:** `.htaccess` files are included for security. If not using Apache, be sure to deny permission to `data/` and `config.ini` in your web server configuration.
+A web server running PHP 5.4 or higher with the `curl` module installed is required to run the Wallboard.
+  * Not having the `curl` module installed will manifest as warnings about undefined constants in the PHP
+    logs, such as `Use of undefined constant CURLOPT_POST`.
+
+**NOTE:** `.htaccess` files are included for security. If not using Apache, be sure to deny permission to `data/`
+and `config.ini` in your web server configuration. Below is a sample nginx configuration, assuming your wallboard
+is installed in the `np2` directory:
+
+```
+location ^~ /np2/config.ini {
+      return 404;
+}
+
+ location ~ /np2/data/.*$ {
+      return 404;
+}
+```
 
 ### Usage ###
-1. Download the [latest compiled zip](https://github.com/BrandonDusseau/np2-wallboard/releases/latest/) (the one named `np2-wallboard-vX.X.X.zip`).
+1. Download the [latest compiled zip](https://github.com/BrandonDusseau/np2-wallboard/releases/latest/)
+   (the one named `np2-wallboard-vX.X.X.zip`).
 2. Upload the contents of the `public` directory in the zip file to your desired location on your web server.
 3. Enable write permissions on the `data` directory to whichever user your web server (or PHP server) is running as.
 4. Rename `config.sample.ini` to `config.ini` and put your NP2 credentials into it.
@@ -43,18 +59,21 @@ Left: a standard game, right: a dark, turn-based game.
 
 Sample configuration:
 ```
-username=your_email_or_true_alias
-password=your_password
+username="your_email_or_true_alias"
+password="your_password"
 ```
 
 ### Running in Docker ###
-A sample Dockerfile and docker-compose file are provided in the source code if you desire to run the application from Docker. The provided configurations assume a compiled version of the application is located in a `build` directory relative to where Docker is running.
+A sample Dockerfile and docker-compose file are provided in the source code if you desire to run the application
+from Docker. The provided configurations assume a compiled version of the application is located in a `build`
+directory relative to where Docker is running.
 
 If running from source rather than a pre-compiled release, make sure to follow the instructions in
 _Building From Source_ before starting the Docker container.
 
 ### Building From Source ###
-These steps are only necessary if building the application from source. If you are using a release package as suggested in _Usage_, you should ignore this section.
+These steps are only necessary if building the application from source. If you are using a release package as
+suggested in _Usage_, you should ignore this section.
 
 1. Install nodejs (tested on version 13.x)
 2. Install gulp-cli: `npm install --global gulp-cli`

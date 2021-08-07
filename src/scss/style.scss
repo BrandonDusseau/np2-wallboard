@@ -1,8 +1,4 @@
-@import "compass/reset";
-@import "compass/css3/images";
-@import "compass/css3/transform";
-@import "compass/css3/opacity";
-@import "compass/css3/box-shadow";
+@import "reset.css";
 @import 'https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700';
 
 html, body
@@ -30,7 +26,7 @@ a, a:link, a:visited, a:active {
 	position: absolute;
 	top: 40%;
 	left: 50%;
-	@include translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 	background-color: #D22;
 	border: 4px solid #600;
 	border-radius: 10px;
@@ -88,7 +84,7 @@ a, a:link, a:visited, a:active {
 			.player-head-inner {
 				position: absolute;
 				top: 50%;
-				@include translateY(-50%);
+				transform: translateY(-50%);
 				width: 100%;
 
 				.player-ring {
@@ -139,7 +135,7 @@ a, a:link, a:visited, a:active {
 					position: absolute;
 					top: 50%;
 					width: 100%;
-					@include translateY(-50%);
+					transform: translateY(-50%);
 					display: flex;
 					flex-flow: row nowrap;
 
@@ -285,7 +281,7 @@ a, a:link, a:visited, a:active {
 
 	/* Star pane */
 	#pane_stars {
-		background: #000 image-url("bg.jpg", false, false) 50% 50% no-repeat;
+		background: #000 url("../img/bg.jpg") 50% 50% no-repeat;
 		background-size: cover;
 		background-color: #000;
 		flex: 1 1 auto;
@@ -310,19 +306,19 @@ a, a:link, a:visited, a:active {
 				min-width: 1px;
 				background-color: #FFF;
 				border-radius: 50%;
-				@include single-box-shadow(0, 0, 0.1em, 0, #FFF);
+				box-shadow: 0 0 0.1em 0 #FFF;
 			}
 
 			.star:before {
 				font-size: 1.9em;
 				position: absolute;
 				right: 50%;
-				@include translateX(50%);
+				transform: translateX(50%);
 			}
 		}
 
 		.star-loader {
-			background: #000 image-url("loading.gif", false, false) 50% 50% no-repeat;
+			background: #000 url("../img/loading.gif") 50% 50% no-repeat;
 			width: 116px;
 			height: 116px;
 			margin: 5px;
@@ -331,8 +327,8 @@ a, a:link, a:visited, a:active {
 			position: absolute;
 			top: 50%;
 			left: 50%;
-			@include translate(-50%, -50%);
-			@include opacity(0.8);
+			transform: translate(-50%, -50%);
+			opacity: 0.8;
 			z-index: 1000;
 		}
 	}
@@ -372,8 +368,8 @@ a, a:link, a:visited, a:active {
 				height: 100%;
 				width: 100%;
 				background: #27E;
-				@include skewX(-40deg);
-				@include transform-origin(100%, 0);
+				transform: skewX(-40deg);
+				transform-origin: 100% 0;
 				z-index: -1;
 			}
 

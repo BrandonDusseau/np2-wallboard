@@ -1,5 +1,4 @@
-@import "compass/reset";
-@import "compass/css3/box-shadow";
+@import "reset.css";
 @import 'https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700';
 
 * body, html, body {
@@ -23,7 +22,7 @@ h1 {
 	text-align: center;
 	width: 600px;
 	height: 100%;
-	@include single-box-shadow(0, 0, 10px, 0, #1A1D44);
+	box-shadow: 0 0 10px 0 #1A1D44;
 	display: flex;
 	flex-flow: column nowrap;
 

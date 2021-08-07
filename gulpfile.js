@@ -1,7 +1,7 @@
 const { parallel, src, dest, series } = require('gulp');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
-const compass = require('gulp-compass');
+const sass = require('gulp-sass')(require('sass'));
 const composer = require('gulp-composer');
 const gulpif = require('gulp-if');
 const del = require('del');
@@ -27,7 +27,7 @@ function css() {
     .pipe(
       gulpif(
         isScssFile,
-        compass({ config_file: './config.rb', sass: 'src/scss', css: 'build/css' })
+        sass({outputStyle: 'compressed'}).on('error', sass.logError)
       )
     )
     .pipe(dest('build/css/'));

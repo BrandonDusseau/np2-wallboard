@@ -11,14 +11,14 @@
   },
   "homepage": "https://github.com/BrandonDusseau/np2-wallboard#readme",
   "devDependencies": {
-    "del": "^5.1.0",
-    "eslint": "^6.8.0",
+    "del": "^6.0.0",
+    "eslint": "^7.32.0",
     "gulp": "^4.0.2",
-    "gulp-compass": "^2.1.0",
     "gulp-composer": "^0.4.5",
     "gulp-if": "^3.0.0",
     "gulp-rename": "^2.0.0",
+    "gulp-sass": "^5.0.0",
     "gulp-uglify": "^3.0.2",
-    "node-sass": "^4.13.1"
+    "sass": "^1.37.5"
   }
 }

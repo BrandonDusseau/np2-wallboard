@@ -42,7 +42,7 @@ $app_version = "#APPVERSION#";
 		<div class="version">
 			NP2 Wallboard v<?php echo (strpos($app_version, "APPVERSION") !== false) ? "Dev" : $app_version; ?>
 			&middot;
-			&copy;2016-2019 Brandon Dusseau
+			&copy;2016-2021 Brandon Dusseau
 			&middot;
 			<a href="https://github.com/BrandonDusseau/np2-wallboard">GitHub</a>
 		</div>

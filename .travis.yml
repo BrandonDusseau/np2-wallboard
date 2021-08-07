@@ -5,7 +5,6 @@ os: linux
 install:
   - npm install -g gulp-cli
   - npm install
-  - gem install compass
 
 jobs:
   include:

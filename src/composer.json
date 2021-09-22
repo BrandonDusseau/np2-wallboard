@@ -6,18 +6,18 @@
 			"package":
 			{
 				"name": "brandondusseau/phptriton",
-				"version": "v0.0.2",
+				"version": "v0.0.4",
 				"source":
 				{
 					"url": "https://github.com/BrandonDusseau/phptriton.git",
 					"type": "git",
-					"reference": "v0.0.2"
+					"reference": "v0.0.4"
 				}
 			}
 		}
 	},
 	"require": {
-		"brandondusseau/phptriton": "v0.0.2"
+		"brandondusseau/phptriton": "v0.0.4"
 	},
 	"minimum-stability": "dev"
 }

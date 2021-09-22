@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "67630d734092e8f9679db074666fb156",
+    "content-hash": "d30bb4d0e9ad0e3999c12d64945e975c",
     "packages": [
         {
             "name": "brandondusseau/phptriton",
-            "version": "v0.0.2",
+            "version": "v0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BrandonDusseau/phptriton.git",
-                "reference": "v0.0.2"
+                "reference": "v0.0.4"
             },
             "type": "library"
         }
@@ -24,5 +24,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }

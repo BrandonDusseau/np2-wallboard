@@ -8,10 +8,10 @@ jobs:
     needs: call-base-workflow
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
           name: build
-      - uses: actions/checkout@v3
       - run: |
           ls
           ls build

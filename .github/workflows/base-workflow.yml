@@ -1,0 +1,26 @@
+name: base-workflow
+on: workflow_call
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 13
+      - run: npm install -g eslint
+      - run: eslint src/js/*.js
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 13
+      - run: npm install -g gulp-cli
+      - run: gulp
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: |
+            build

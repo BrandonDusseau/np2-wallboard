@@ -18,6 +18,7 @@ jobs:
         with:
           node-version: 13
       - run: npm install -g gulp-cli
+      - run: npm install
       - run: gulp
       - uses: actions/upload-artifact@v3
         with:

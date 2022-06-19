@@ -13,6 +13,8 @@ jobs:
           name: build
       - uses: actions/checkout@v3
       - run: |
+          ls
+          ls build
           CLEAN_VERSION=${GITHUB_REF//refs\/tags\/v/}
           sed -i.bak "s/#APPVERSION#/$CLEAN_VERSION/" build/*.php
           rm build/*.bak

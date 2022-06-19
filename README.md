@@ -1,6 +1,6 @@
 # Neptune's Pride 2 Wallboard #
 
-[![Build Status](https://travis-ci.com/BrandonDusseau/np2-wallboard.svg?branch=master)](https://travis-ci.com/BrandonDusseau/np2-wallboard)
+![Build Status](https://github.com/BrandonDusseau/np2-wallboard/actions/workflows/build.yml/badge.svg)
 
 A ten-foot style display for tracking stats in Neptune's Pride 2: Triton.
 This project is licensed under the MIT License - see the LICENSE file for

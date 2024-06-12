@@ -75,9 +75,10 @@ _Building From Source_ before starting the Docker container.
 These steps are only necessary if building the application from source. If you are using a release package as
 suggested in _Usage_, you should ignore this section.
 
-1. Install nodejs (tested on version 13.x)
-2. Install gulp-cli: `npm install --global gulp-cli`
-3. Navigate your terminal to this directory and run `gulp`
+1. Install nodejs (tested on Node 20). If using nvm, run `nvm use` from the project directory instead. You may be
+   prompted to install the required version.
+2. Install dependencies: `npm install`
+3. Navigate your terminal to this directory and run `npx gulp`
 
 ### Attributions ###
 This project utilizes icon fonts found on [Fontello](http://fontello.com).
